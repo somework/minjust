@@ -1,8 +1,8 @@
 <?php
 
-namespace BreviManu\Minjust\Strategy;
+namespace SomeWork\Minjust\Strategy;
 
-use BreviManu\Minjust\Entity\Lawyer;
+use SomeWork\Minjust\Entity\Lawyer;
 use PHPHtmlParser\Dom;
 
 interface ParseStrategyInterface

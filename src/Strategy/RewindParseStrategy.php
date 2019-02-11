@@ -1,6 +1,6 @@
 <?php
 
-namespace BreviManu\Minjust\Strategy;
+namespace SomeWork\Minjust\Strategy;
 
 use PHPHtmlParser\Dom;
 

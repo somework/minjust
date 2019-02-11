@@ -6,16 +6,16 @@ Example
 require __DIR__ . '/vendor/autoload.php';
 
 $dom = new \PHPHtmlParser\Dom();
-$parser = new \BreviManu\Minjust\Parser($dom, [
-    new \BreviManu\Minjust\Strategy\RewindParseStrategy(),
-    new \BreviManu\Minjust\Strategy\NoPaginationParseStrategy(),
-    new \BreviManu\Minjust\Strategy\NoRewindParseStrategy(),
+$parser = new \SomeWork\Minjust\Parser($dom, [
+    new \SomeWork\Minjust\Strategy\RewindParseStrategy(),
+    new \SomeWork\Minjust\Strategy\NoPaginationParseStrategy(),
+    new \SomeWork\Minjust\Strategy\NoRewindParseStrategy(),
 ]);
 
 $client = new \GuzzleHttp\Client();
-$service = new \BreviManu\Minjust\Service($client, $parser);
+$service = new \SomeWork\Minjust\Service($client, $parser);
 
-$findRequest = new \BreviManu\Minjust\FindRequest();
+$findRequest = new \SomeWork\Minjust\FindRequest();
 $findRequest->setMax(100);
 $response = $service->findAll($findRequest);
 ```

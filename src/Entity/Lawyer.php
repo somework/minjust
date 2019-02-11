@@ -1,6 +1,6 @@
 <?php
 
-namespace BreviManu\Minjust\Entity;
+namespace SomeWork\Minjust\Entity;
 
 class Lawyer
 {
