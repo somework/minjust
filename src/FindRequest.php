@@ -1,6 +1,6 @@
 <?php
 
-namespace BreviManu\Minjust;
+namespace SomeWork\Minjust;
 
 class FindRequest
 {

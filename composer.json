@@ -1,5 +1,5 @@
 {
-  "name": "brevimanu/minjust",
+  "name": "somework/minjust",
   "description": "Service to get data from minjust",
   "minimum-stability": "stable",
   "license": "MIT",
@@ -14,7 +14,7 @@
   },
   "autoload": {
     "psr-4": {
-      "BreviManu\\Minjust\\": "src/"
+      "SomeWork\\Minjust\\": "src/"
     }
   },
   "scripts": {

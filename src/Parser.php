@@ -1,8 +1,8 @@
 <?php
 
-namespace BreviManu\Minjust;
+namespace SomeWork\Minjust;
 
-use BreviManu\Minjust\Strategy\ParseStrategyInterface;
+use SomeWork\Minjust\Strategy\ParseStrategyInterface;
 use PHPHtmlParser\Dom;
 
 class Parser
