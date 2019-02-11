@@ -1,0 +1,29 @@
+{
+  "name": "brevimanu/minjust",
+  "description": "Service to get data from minjust",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Igor Pinchuk",
+      "email": "i.pinchuk.work@gmail.com"
+    }
+  ],
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^2.14"
+  },
+  "autoload": {
+    "psr-4": {
+      "BreviManu\\Minjust\\": "src/"
+    }
+  },
+  "scripts": {
+    "lint": "php-cs-fixer fix --diff --dry-run",
+    "fix": "php-cs-fixer fix"
+  },
+  "require": {
+    "psr/http-message": "^1.0",
+    "guzzlehttp/guzzle": "^6.3",
+    "paquettg/php-html-parser": "^2.0"
+  }
+}
