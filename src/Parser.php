@@ -25,7 +25,7 @@ class Parser
 
     public function buildResponse(string $body): FindResponse
     {
-        $dom = clone $this->dom;
+        $dom = new Dom();
         $dom->load($body);
         $strategy = $this->guessStrategy($dom);
 

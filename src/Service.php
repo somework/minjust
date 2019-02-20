@@ -30,7 +30,12 @@ class Service
 
     public function findAll(FindRequest $findRequest): \Generator
     {
-        $findRequest->setOffset(0);
+        return $this->findFromTo($findRequest, 1, 0);
+    }
+
+    public function findFromTo(FindRequest $findRequest, int $startPage = 1, int $endPage = 1): \Generator
+    {
+        $findRequest->setOffset(($startPage - 1) * $findRequest->getMax());
         $findResponse = $this->find($findRequest);
 
         yield from $findResponse->getElements();
@@ -38,7 +43,7 @@ class Service
             return;
         }
 
-        for ($i = $findResponse->getPage(); $i < $findResponse->getTotalPage(); $i++) {
+        for ($i = $findResponse->getPage(); $i < $endPage ?: $findResponse->getTotalPage(); $i++) {
             $findRequest->setOffset($i * $findRequest->getMax());
             yield from $this->find($findRequest)->getElements();
         }
