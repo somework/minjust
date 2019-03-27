@@ -43,7 +43,10 @@ class Service
             return;
         }
 
-        for ($i = $findResponse->getPage(); $i < $endPage ?: $findResponse->getTotalPage(); $i++) {
+        $endPage = $endPage ?: $findResponse->getTotalPage();
+
+        for ($i = $findResponse->getPage(); $i < $endPage; $i++) {
+            $endPage = $endPage < $findResponse->getTotalPage() ? $endPage : $findResponse->getTotalPage();
             $findRequest->setOffset($i * $findRequest->getMax());
             yield from $this->find($findRequest)->getElements();
         }
