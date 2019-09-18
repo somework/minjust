@@ -5,9 +5,14 @@ namespace SomeWork\Minjust;
 class FindResponse
 {
     /**
-     * @var array
+     * @var \SomeWork\Minjust\Entity\Lawyer[]
      */
     protected $elements = [];
+
+    /**
+     * @var \Generator|\SomeWork\Minjust\Entity\FullLawyer[]
+     */
+    protected $fullElements;
 
     /**
      * @var int
@@ -112,6 +117,26 @@ class FindResponse
     public function addElement(array $element): self
     {
         $this->elements[] = $element;
+
+        return $this;
+    }
+
+    /**
+     * @return \Generator|\SomeWork\Minjust\Entity\FullLawyer[]
+     */
+    public function getFullElements()
+    {
+        return $this->fullElements;
+    }
+
+    /**
+     * @param \Generator|\SomeWork\Minjust\Entity\FullLawyer[] $fullElements
+     *
+     * @return static
+     */
+    public function setFullElements(\Generator $fullElements): self
+    {
+        $this->fullElements = $fullElements;
 
         return $this;
     }

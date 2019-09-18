@@ -2,13 +2,8 @@
 
 namespace SomeWork\Minjust;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\RequestOptions;
-
 class Service
 {
-    private const SERVICE_URL = 'http://lawyers.minjust.ru/Lawyers';
-
     /**
      * @var Client
      */
@@ -38,7 +33,7 @@ class Service
         $findRequest->setOffset(($startPage - 1) * $findRequest->getMax());
         $findResponse = $this->find($findRequest);
 
-        yield from $findResponse->getElements();
+        yield from $findRequest->isFullData() ? $findResponse->getFullElements() : $findResponse->getElements();
         if ($findResponse->getTotalPage() === 1) {
             return;
         }
@@ -48,7 +43,9 @@ class Service
         for ($i = $findResponse->getPage(); $i < $endPage; $i++) {
             $endPage = $endPage < $findResponse->getTotalPage() ? $endPage : $findResponse->getTotalPage();
             $findRequest->setOffset($i * $findRequest->getMax());
-            yield from $this->find($findRequest)->getElements();
+            yield from $findRequest->isFullData() ?
+                $this->find($findRequest)->getFullElements() :
+                $this->find($findRequest)->getElements();
         }
     }
 
@@ -56,17 +53,39 @@ class Service
      * @param FindRequest $findRequest
      *
      * @return FindResponse
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \PHPHtmlParser\Exceptions\ChildNotFoundException
+     * @throws \PHPHtmlParser\Exceptions\CircularException
+     * @throws \PHPHtmlParser\Exceptions\CurlException
+     * @throws \PHPHtmlParser\Exceptions\NotLoadedException
+     * @throws \PHPHtmlParser\Exceptions\StrictException
      */
     public function find(FindRequest $findRequest): FindResponse
     {
-        return $this->parser->buildResponse(
-            $this
-                ->client
-                ->request('GET', static::SERVICE_URL, [
-                    RequestOptions::QUERY => $findRequest->getFormData(),
-                ])
-                ->getBody()
+        $response = $this->parser->buildListResponse(
+            $this->client->list($findRequest->getFormData())
         );
+
+        $response->setFullElements(
+            $this->loadDetails(
+                $response->getElements()
+            )
+        );
+
+        return $response;
+    }
+
+    /**
+     * @param \SomeWork\Minjust\Entity\Lawyer[] $lawyers
+     *
+     * @return \Generator
+     */
+    protected function loadDetails(array $lawyers): \Generator
+    {
+        foreach ($lawyers as $lawyer) {
+            yield $this->parser->buildFullLawyer(
+                $lawyer,
+                $this->client->detail($lawyer->getUrl())
+            );
+        }
     }
 }

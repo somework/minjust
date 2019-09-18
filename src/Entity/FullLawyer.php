@@ -17,6 +17,12 @@ class FullLawyer extends Lawyer
     public static function init(Lawyer $lawyer): FullLawyer
     {
         return (new self())
+            ->loadFromLawyer($lawyer);
+    }
+
+    public function loadFromLawyer(Lawyer $lawyer): self
+    {
+        return $this
             ->setRegisterNumber($lawyer->getRegisterNumber())
             ->setFullName($lawyer->getFullName())
             ->setUrl($lawyer->getUrl())

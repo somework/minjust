@@ -5,12 +5,19 @@ namespace SomeWork\Minjust;
 class FindRequest
 {
     private const FULL_NAME = 'lawyername';
+
     private const REGISTER_NUMBER = 'regnumber';
+
     private const CERTIFICATE_NUMBER = 'lawicard';
+
     private const STATUS = 'lawstatus';
+
     private const FORM_OF_LEGAL_PRACTICE = 'formation';
+
     private const TERRITORIAL_SUBJECT = 'lawregion';
+
     private const MAX = 'max';
+
     private const OFFSET = 'offset';
 
     private const MAX_VALUE_MAX = 100;
@@ -44,6 +51,8 @@ class FindRequest
      * @var int|null
      */
     protected $territorialSubject;
+
+    protected $fullData = false;
 
     /**
      * @var int
@@ -232,5 +241,25 @@ class FindRequest
         $this->offset = $offset;
 
         return $this;
+    }
+
+    /**
+     * @param bool $fullData
+     *
+     * @return FindRequest
+     */
+    public function setFullData(bool $fullData = true): FindRequest
+    {
+        $this->fullData = $fullData;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFullData(): bool
+    {
+        return $this->fullData;
     }
 }
