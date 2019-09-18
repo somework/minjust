@@ -30,6 +30,31 @@ class Lawyer
     protected $territorialSubject;
 
     /**
+     * @var string
+     */
+    protected $url;
+
+    /**
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return static
+     */
+    public function setUrl(string $url): self
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getFullName(): string
@@ -40,9 +65,9 @@ class Lawyer
     /**
      * @param string $fullName
      *
-     * @return Lawyer
+     * @return static
      */
-    public function setFullName(string $fullName): Lawyer
+    public function setFullName(string $fullName): self
     {
         $this->fullName = $fullName;
 
@@ -60,9 +85,9 @@ class Lawyer
     /**
      * @param string $registerNumber
      *
-     * @return Lawyer
+     * @return static
      */
-    public function setRegisterNumber(string $registerNumber): Lawyer
+    public function setRegisterNumber(string $registerNumber): self
     {
         $this->registerNumber = $registerNumber;
 
@@ -80,9 +105,9 @@ class Lawyer
     /**
      * @param string $certificateNumber
      *
-     * @return Lawyer
+     * @return static
      */
-    public function setCertificateNumber(string $certificateNumber): Lawyer
+    public function setCertificateNumber(string $certificateNumber): self
     {
         $this->certificateNumber = $certificateNumber;
 
@@ -100,9 +125,9 @@ class Lawyer
     /**
      * @param string $status
      *
-     * @return Lawyer
+     * @return static
      */
-    public function setStatus(string $status): Lawyer
+    public function setStatus(string $status): self
     {
         $this->status = $status;
 
@@ -120,9 +145,9 @@ class Lawyer
     /**
      * @param string $territorialSubject
      *
-     * @return Lawyer
+     * @return static
      */
-    public function setTerritorialSubject(string $territorialSubject): Lawyer
+    public function setTerritorialSubject(string $territorialSubject): self
     {
         $this->territorialSubject = $territorialSubject;
 

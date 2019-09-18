@@ -4,7 +4,7 @@ namespace SomeWork\Minjust\Strategy;
 
 use PHPHtmlParser\Dom;
 
-class NoPaginationParseStrategy extends AbstractParseStrategy
+class NoPaginationParseStrategy implements ParseStrategyInterface
 {
     public function getPage(Dom $dom): int
     {

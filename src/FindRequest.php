@@ -58,14 +58,14 @@ class FindRequest
     public function getFormData(): array
     {
         return [
-            self::FULL_NAME => $this->getFullName(),
-            self::REGISTER_NUMBER => $this->getRegisterNumber(),
-            self::CERTIFICATE_NUMBER => $this->getCertificateNumber(),
-            self::STATUS => $this->getStatus(),
+            self::FULL_NAME              => $this->getFullName(),
+            self::REGISTER_NUMBER        => $this->getRegisterNumber(),
+            self::CERTIFICATE_NUMBER     => $this->getCertificateNumber(),
+            self::STATUS                 => $this->getStatus(),
             self::FORM_OF_LEGAL_PRACTICE => $this->getFormOfLegalPractice(),
-            self::TERRITORIAL_SUBJECT => $this->getTerritorialSubject(),
-            self::MAX => $this->getMax(),
-            self::OFFSET => $this->getOffset(),
+            self::TERRITORIAL_SUBJECT    => $this->getTerritorialSubject(),
+            self::MAX                    => $this->getMax(),
+            self::OFFSET                 => $this->getOffset(),
         ];
     }
 

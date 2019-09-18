@@ -4,7 +4,7 @@ namespace SomeWork\Minjust\Strategy;
 
 use PHPHtmlParser\Dom;
 
-class NoRewindParseStrategy extends AbstractParseStrategy
+class NoRewindParseStrategy implements ParseStrategyInterface
 {
     public function getPage(Dom $dom): int
     {

@@ -5,8 +5,7 @@ Example
 
 require __DIR__ . '/vendor/autoload.php';
 
-$dom = new \PHPHtmlParser\Dom();
-$parser = new \SomeWork\Minjust\Parser($dom, [
+$parser = new \SomeWork\Minjust\Parser([
     new \SomeWork\Minjust\Strategy\RewindParseStrategy(),
     new \SomeWork\Minjust\Strategy\NoPaginationParseStrategy(),
     new \SomeWork\Minjust\Strategy\NoRewindParseStrategy(),
