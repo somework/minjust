@@ -58,6 +58,7 @@ class Service
      * @throws \PHPHtmlParser\Exceptions\CurlException
      * @throws \PHPHtmlParser\Exceptions\NotLoadedException
      * @throws \PHPHtmlParser\Exceptions\StrictException
+     * @throws \Psr\Http\Client\ClientExceptionInterface
      */
     public function find(FindRequest $findRequest): FindResponse
     {
