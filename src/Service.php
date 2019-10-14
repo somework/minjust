@@ -2,6 +2,8 @@
 
 namespace SomeWork\Minjust;
 
+use Generator;
+
 class Service
 {
     /**
@@ -23,12 +25,12 @@ class Service
         $this->parser = $parser;
     }
 
-    public function findAll(FindRequest $findRequest): \Generator
+    public function findAll(FindRequest $findRequest): Generator
     {
         return $this->findFromTo($findRequest, 1, 0);
     }
 
-    public function findFromTo(FindRequest $findRequest, int $startPage = 1, int $endPage = 1): \Generator
+    public function findFromTo(FindRequest $findRequest, int $startPage = 1, int $endPage = 1): Generator
     {
         $findRequest->setOffset(($startPage - 1) * $findRequest->getMax());
         $findResponse = $this->find($findRequest);
@@ -80,7 +82,7 @@ class Service
      *
      * @return \Generator
      */
-    protected function loadDetails(array $lawyers): \Generator
+    protected function loadDetails(array $lawyers): Generator
     {
         foreach ($lawyers as $lawyer) {
             yield $this->parser->buildFullLawyer(

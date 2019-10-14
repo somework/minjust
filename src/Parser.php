@@ -2,6 +2,7 @@
 
 namespace SomeWork\Minjust;
 
+use LogicException;
 use PHPHtmlParser\Dom;
 use SomeWork\Minjust\Entity\FullLawyer;
 use SomeWork\Minjust\Entity\LawFormation;
@@ -53,7 +54,7 @@ class Parser
             }
         }
 
-        throw new \LogicException('No strategy found for current dom');
+        throw new LogicException('No strategy found for current dom');
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace SomeWork\Minjust;
 
+use InvalidArgumentException;
+
 class FindRequest
 {
     private const FULL_NAME = 'lawyername';
@@ -214,7 +216,7 @@ class FindRequest
     public function setMax(int $max): FindRequest
     {
         if ($max > static::MAX_VALUE_MAX) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf('Maximum value for "%s" is %s', static::MAX, static::MAX_VALUE_MAX)
             );
         }

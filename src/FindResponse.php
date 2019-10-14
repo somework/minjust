@@ -2,6 +2,8 @@
 
 namespace SomeWork\Minjust;
 
+use Generator;
+
 class FindResponse
 {
     /**
@@ -134,7 +136,7 @@ class FindResponse
      *
      * @return static
      */
-    public function setFullElements(\Generator $fullElements): self
+    public function setFullElements(Generator $fullElements): self
     {
         $this->fullElements = $fullElements;
 
