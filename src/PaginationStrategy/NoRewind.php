@@ -1,14 +1,14 @@
 <?php
 
-namespace SomeWork\Minjust\Strategy;
+namespace SomeWork\Minjust\PaginationStrategy;
 
 use PHPHtmlParser\Dom;
 
-class NoRewindParseStrategy implements ParseStrategyInterface
+class NoRewind implements ParseStrategyInterface
 {
     public function getPage(Dom $dom): int
     {
-        return (int) $dom->find('span.currentStep')[0]->text();
+        return (int) $dom->find('span.currentStep', 0)->text();
     }
 
     public function getTotalPage(Dom $dom): int
@@ -25,6 +25,6 @@ class NoRewindParseStrategy implements ParseStrategyInterface
 
     public function isSupport(Dom $dom): bool
     {
-        return $this->getSteps($dom)->count() > 0;
+        return $this->getSteps($dom)->count() > 1;
     }
 }

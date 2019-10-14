@@ -1,10 +1,10 @@
 <?php
 
-namespace SomeWork\Minjust\Strategy;
+namespace SomeWork\Minjust\PaginationStrategy;
 
 use PHPHtmlParser\Dom;
 
-class NoPaginationParseStrategy implements ParseStrategyInterface
+class NoPagination implements ParseStrategyInterface
 {
     public function getPage(Dom $dom): int
     {

@@ -1,10 +1,10 @@
 <?php
 
-namespace SomeWork\Minjust\Strategy;
+namespace SomeWork\Minjust\PaginationStrategy;
 
 use PHPHtmlParser\Dom;
 
-class RewindParseStrategy implements ParseStrategyInterface
+class Rewind implements ParseStrategyInterface
 {
     public function getPage(Dom $dom): int
     {
@@ -20,6 +20,10 @@ class RewindParseStrategy implements ParseStrategyInterface
 
     protected function getSteps(Dom $dom): Dom\Collection
     {
+        /*
+         * Пакет парсера бажит
+         * Нужно думать
+         */
         return $dom->find('span.summ > div.pagination > a > a');
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace SomeWork\Minjust\Strategy;
+namespace SomeWork\Minjust\PaginationStrategy;
 
 use PHPHtmlParser\Dom;
 

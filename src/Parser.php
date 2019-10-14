@@ -7,7 +7,7 @@ use PHPHtmlParser\Dom;
 use SomeWork\Minjust\Entity\FullLawyer;
 use SomeWork\Minjust\Entity\LawFormation;
 use SomeWork\Minjust\Entity\Lawyer;
-use SomeWork\Minjust\Strategy\ParseStrategyInterface;
+use SomeWork\Minjust\PaginationStrategy\ParseStrategyInterface;
 
 class Parser
 {
