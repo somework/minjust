@@ -2,23 +2,21 @@
 
 namespace SomeWork\Minjust;
 
-use LogicException;
 use PHPHtmlParser\Dom;
 use SomeWork\Minjust\Entity\FullLawyer;
 use SomeWork\Minjust\Entity\LawFormation;
 use SomeWork\Minjust\Entity\Lawyer;
-use SomeWork\Minjust\PaginationStrategy\ParseStrategyInterface;
 
 class Parser
 {
     /**
-     * @var ParseStrategyInterface[]
+     * @var \SomeWork\Minjust\ListParserInterface
      */
-    private $strategies;
+    private $parseStrategy;
 
-    public function __construct(array $strategies)
+    public function __construct(ListParserInterface $parseStrategy)
     {
-        $this->strategies = $strategies;
+        $this->parseStrategy = $parseStrategy;
     }
 
     /**
@@ -35,60 +33,14 @@ class Parser
     {
         $dom = new Dom();
         $dom->load($body);
-        $strategy = $this->guessStrategy($dom);
 
         $findResponse = new FindResponse();
         $findResponse
-            ->setPage($strategy->getPage($dom))
-            ->setTotalPage($strategy->getTotalPage($dom))
-            ->setElements($this->getListElements($dom));
+            ->setPage($this->parseStrategy->getCurrentPage($dom))
+            ->setTotalPage($this->parseStrategy->getTotalPage($dom))
+            ->setElements($this->parseStrategy->getListLawyers($dom));
 
         return $findResponse;
-    }
-
-    protected function guessStrategy(Dom $dom)
-    {
-        foreach ($this->strategies as $strategy) {
-            if ($strategy->isSupport($dom)) {
-                return $strategy;
-            }
-        }
-
-        throw new LogicException('No strategy found for current dom');
-    }
-
-    /**
-     * @param Dom $dom
-     *
-     * @return Lawyer[]
-     * @throws \PHPHtmlParser\Exceptions\ChildNotFoundException
-     * @throws \PHPHtmlParser\Exceptions\NotLoadedException
-     */
-    protected function getListElements(Dom $dom): array
-    {
-        $data = [];
-        /**
-         * @var Dom\HtmlNode[]|\PHPHtmlParser\Dom\Collection $nodes
-         */
-        $nodes = $dom->find('table.persons > tbody > tr');
-        foreach ($nodes as $node) {
-            /**
-             * @var Dom\HtmlNode[]|\PHPHtmlParser\Dom\Collection $tds
-             */
-            $tds = $node->find('td');
-            $tds = array_filter($tds->toArray(), static function (Dom\HtmlNode $node) {
-                return $node->outerHtml() !== '' && $node->getAttribute('class') !== 'empty';
-            });
-            $data[] = (new Lawyer())
-                ->setRegisterNumber($tds[3]->text())
-                ->setFullName($tds[4]->text(true))
-                ->setUrl($tds[4]->firstChild()->getAttribute('href'))
-                ->setTerritorialSubject($tds[5]->text())
-                ->setCertificateNumber($tds[6]->text())
-                ->setStatus($tds[7]->text());
-        }
-
-        return $data;
     }
 
     public function buildFullLawyer(Lawyer $lawyer, string $body): FullLawyer

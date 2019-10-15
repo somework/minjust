@@ -5,11 +5,9 @@ Example
 
 require __DIR__ . '/vendor/autoload.php';
 
-$parser = new \SomeWork\Minjust\Parser([
-    new \SomeWork\Minjust\Strategy\RewindParseStrategy(),
-    new \SomeWork\Minjust\Strategy\NoPaginationParseStrategy(),
-    new \SomeWork\Minjust\Strategy\NoRewindParseStrategy(),
-]);
+$parser = new \SomeWork\Minjust\Parser(
+    new \SomeWork\Minjust\PaginationStrategy\Pagination(),
+);
 
 $client = new \GuzzleHttp\Client();
 $service = new \SomeWork\Minjust\Service($client, $parser);
