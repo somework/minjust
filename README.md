@@ -6,7 +6,7 @@ Example
 require __DIR__ . '/vendor/autoload.php';
 
 $parser = new \SomeWork\Minjust\Parser(
-    new \SomeWork\Minjust\PaginationStrategy\Pagination(),
+    new \SomeWork\Minjust\DomParser()
 );
 
 $client = new \GuzzleHttp\Client();

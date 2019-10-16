@@ -4,6 +4,7 @@ namespace SomeWork\Minjust;
 
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 class Client
 {
@@ -21,10 +22,19 @@ class Client
      */
     private $requestFactory;
 
-    public function __construct(ClientInterface $client, RequestFactoryInterface $requestFactory)
-    {
+    /**
+     * @var \Psr\Http\Message\StreamFactoryInterface
+     */
+    private $streamFactory;
+
+    public function __construct(
+        ClientInterface $client,
+        RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory
+    ) {
         $this->client = $client;
         $this->requestFactory = $requestFactory;
+        $this->streamFactory = $streamFactory;
     }
 
     /**
@@ -35,9 +45,17 @@ class Client
      */
     public function list(array $formData = []): string
     {
-        $request = $this
-            ->requestFactory
-            ->createRequest('GET', static::LIST_URL . '?' . http_build_query($formData));
+        if ([] === $formData) {
+            $request = $this
+                ->requestFactory
+                ->createRequest('GET', static::LIST_URL);
+        } else {
+            $request = $this
+                ->requestFactory
+                ->createRequest('POST', static::LIST_URL)
+                ->withBody($this->streamFactory->createStream(http_build_query($formData, null, '&')))
+                ->withHeader('Content-Type', 'application/x-www-form-urlencoded');
+        }
 
         return $this
             ->client

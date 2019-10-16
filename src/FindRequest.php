@@ -6,21 +6,21 @@ use InvalidArgumentException;
 
 class FindRequest
 {
-    private const FULL_NAME = 'lawyername';
+    public const FULL_NAME = 'lawyername';
 
-    private const REGISTER_NUMBER = 'regnumber';
+    public const REGISTER_NUMBER = 'regnumber';
 
-    private const CERTIFICATE_NUMBER = 'lawicard';
+    public const CERTIFICATE_NUMBER = 'lawicard';
 
-    private const STATUS = 'lawstatus';
+    public const STATUS = 'lawstatus';
 
-    private const FORM_OF_LEGAL_PRACTICE = 'formation';
+    public const FORM_OF_LEGAL_PRACTICE = 'formation';
 
-    private const TERRITORIAL_SUBJECT = 'lawregion';
+    public const TERRITORIAL_SUBJECT = 'lawregion';
 
-    private const MAX = 'max';
+    public const MAX = 'max';
 
-    private const OFFSET = 'offset';
+    public const OFFSET = 'offset';
 
     private const MAX_VALUE_MAX = 100;
 
@@ -246,6 +246,14 @@ class FindRequest
     }
 
     /**
+     * @return bool
+     */
+    public function isFullData(): bool
+    {
+        return $this->fullData;
+    }
+
+    /**
      * @param bool $fullData
      *
      * @return FindRequest
@@ -255,13 +263,5 @@ class FindRequest
         $this->fullData = $fullData;
 
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFullData(): bool
-    {
-        return $this->fullData;
     }
 }

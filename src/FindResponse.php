@@ -12,7 +12,7 @@ class FindResponse
     protected $elements = [];
 
     /**
-     * @var \Generator|\SomeWork\Minjust\Entity\FullLawyer[]
+     * @var \Generator|\SomeWork\Minjust\Entity\DetailLawyer[]
      */
     protected $fullElements;
 
@@ -124,7 +124,7 @@ class FindResponse
     }
 
     /**
-     * @return \Generator|\SomeWork\Minjust\Entity\FullLawyer[]
+     * @return \Generator|\SomeWork\Minjust\Entity\DetailLawyer[]
      */
     public function getFullElements()
     {
@@ -132,7 +132,7 @@ class FindResponse
     }
 
     /**
-     * @param \Generator|\SomeWork\Minjust\Entity\FullLawyer[] $fullElements
+     * @param \Generator|\SomeWork\Minjust\Entity\DetailLawyer[] $fullElements
      *
      * @return static
      */
