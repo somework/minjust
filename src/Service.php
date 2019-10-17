@@ -2,7 +2,9 @@
 
 namespace SomeWork\Minjust;
 
+use Psr\Http\Client\ClientExceptionInterface;
 use Generator;
+use SomeWork\Minjust\Parser\ParserInterface;
 
 class Service
 {
@@ -12,15 +14,12 @@ class Service
     private $client;
 
     /**
-     * @var Parser
+     * @var ParserInterface
      */
     private $parser;
 
-    public function __construct(Client $client, Parser $parser)
+    public function __construct(Client $client, ParserInterface $parser)
     {
-        /*
-         * @todo вынести в конструктор
-         */
         $this->client = $client;
         $this->parser = $parser;
     }
@@ -31,17 +30,12 @@ class Service
     }
 
     /**
-     * @param \SomeWork\Minjust\FindRequest $findRequest
+     * @param FindRequest $findRequest
      * @param int                           $startPage
      * @param int                           $endPage
      *
      * @return \Generator
-     * @throws \PHPHtmlParser\Exceptions\ChildNotFoundException
-     * @throws \PHPHtmlParser\Exceptions\CircularException
-     * @throws \PHPHtmlParser\Exceptions\CurlException
-     * @throws \PHPHtmlParser\Exceptions\NotLoadedException
-     * @throws \PHPHtmlParser\Exceptions\StrictException
-     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws ClientExceptionInterface
      * @todo Упростить логику метода
      */
     public function findFromTo(FindRequest $findRequest, int $startPage = 1, int $endPage = 1): Generator
@@ -69,41 +63,12 @@ class Service
      * @param FindRequest $findRequest
      *
      * @return FindResponse
-     * @throws \PHPHtmlParser\Exceptions\ChildNotFoundException
-     * @throws \PHPHtmlParser\Exceptions\CircularException
-     * @throws \PHPHtmlParser\Exceptions\CurlException
-     * @throws \PHPHtmlParser\Exceptions\NotLoadedException
-     * @throws \PHPHtmlParser\Exceptions\StrictException
-     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws ClientExceptionInterface
      */
     public function find(FindRequest $findRequest): FindResponse
     {
-        $response = $this->parser->listResponse(
+        return $this->parser->list(
             $this->client->list($findRequest->getFormData())
         );
-
-        $response->setFullElements(
-            $this->loadDetails(
-                $response->getElements()
-            )
-        );
-
-        return $response;
-    }
-
-    /**
-     * @param \SomeWork\Minjust\Entity\Lawyer[] $lawyers
-     *
-     * @return \Generator
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     */
-    protected function loadDetails(array $lawyers): Generator
-    {
-        foreach ($lawyers as $lawyer) {
-            yield $this->parser->detailLawyer(
-                $lawyer,
-                $this->client->detail($lawyer->getUrl())
-            );
-        }
     }
 }

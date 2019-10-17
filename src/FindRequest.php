@@ -6,22 +6,49 @@ use InvalidArgumentException;
 
 class FindRequest
 {
+    /**
+     * @var string
+     */
     public const FULL_NAME = 'lawyername';
 
+    /**
+     * @var string
+     */
     public const REGISTER_NUMBER = 'regnumber';
 
+    /**
+     * @var string
+     */
     public const CERTIFICATE_NUMBER = 'lawicard';
 
+    /**
+     * @var string
+     */
     public const STATUS = 'lawstatus';
 
+    /**
+     * @var string
+     */
     public const FORM_OF_LEGAL_PRACTICE = 'formation';
 
+    /**
+     * @var string
+     */
     public const TERRITORIAL_SUBJECT = 'lawregion';
 
+    /**
+     * @var string
+     */
     public const MAX = 'max';
 
+    /**
+     * @var string
+     */
     public const OFFSET = 'offset';
 
+    /**
+     * @var int
+     */
     private const MAX_VALUE_MAX = 100;
 
     /**

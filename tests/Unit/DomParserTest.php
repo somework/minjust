@@ -3,27 +3,21 @@
 namespace SomeWork\Minjust\Tests\Unit;
 
 use PHPHtmlParser\Dom;
-use PHPUnit\Framework\TestCase;
-use SomeWork\Minjust\DomParser;
+use ReflectionClass;
 use SomeWork\Minjust\Entity\DetailLawyer;
 use SomeWork\Minjust\Entity\LawFormation;
 use SomeWork\Minjust\Entity\Lawyer;
+use SomeWork\Minjust\Parser\DomParser;
+use SomeWork\Minjust\Parser\ParserInterface;
 
-class DomParserTest extends TestCase
+/**
+ * @var DomParser $parser
+ */
+class DomParserTest extends AbstractParserTest
 {
-    /**
-     * @var \SomeWork\Minjust\DomParser
-     */
-    protected static $parser;
-
-    public static function setUpBeforeClass(): void
+    public static function getNewParser(): ParserInterface
     {
-        static::$parser = new DomParser();
-    }
-
-    public static function tearDownAfterClass(): void
-    {
-        static::$parser = null;
+        return new DomParser();
     }
 
     /**
@@ -36,11 +30,35 @@ class DomParserTest extends TestCase
      * @throws \PHPHtmlParser\Exceptions\CircularException
      * @throws \PHPHtmlParser\Exceptions\CurlException
      * @throws \PHPHtmlParser\Exceptions\StrictException
+     * @throws \ReflectionException
      */
     public function testGetTotalPage(string $resource, int $pages): void
     {
         $dom = (new Dom())->load($resource);
-        $this->assertEquals($pages, static::$parser->getTotalPage($dom));
+
+        $this->assertEquals(
+            $pages,
+            $this->invokeMethod(static::$parser, 'getTotalPage', [$dom])
+        );
+    }
+
+    /**
+     * Call protected/private method of a class.
+     *
+     * @param object &$object     Instantiated object that we will run method on.
+     * @param string  $methodName Method name to call
+     * @param array   $parameters Array of parameters to pass into method.
+     *
+     * @return mixed Method return.
+     * @throws \ReflectionException
+     */
+    public function invokeMethod(&$object, $methodName, array $parameters = [])
+    {
+        $reflection = new ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($object, $parameters);
     }
 
     /**
@@ -53,11 +71,13 @@ class DomParserTest extends TestCase
      * @throws \PHPHtmlParser\Exceptions\CircularException
      * @throws \PHPHtmlParser\Exceptions\CurlException
      * @throws \PHPHtmlParser\Exceptions\StrictException
+     * @throws \ReflectionException
      */
     public function testGetCurrentPage(string $resource, int $page): void
     {
         $dom = (new Dom())->load($resource);
-        $this->assertEquals($page, static::$parser->getCurrentPage($dom), 'Wrong for: ' . $resource);
+        $this->assertEquals($page, $this->invokeMethod(static::$parser, 'getCurrentPage', [$dom]),
+            'Wrong for: ' . $resource);
     }
 
     /**
@@ -71,12 +91,12 @@ class DomParserTest extends TestCase
      * @throws \PHPHtmlParser\Exceptions\CircularException
      * @throws \PHPHtmlParser\Exceptions\CurlException
      * @throws \PHPHtmlParser\Exceptions\StrictException
-     * @throws \PHPHtmlParser\Exceptions\NotLoadedException
+     * @throws \ReflectionException
      */
     public function testGetListLawyers(string $resource, int $count): void
     {
         $dom = (new Dom())->load($resource);
-        $lawyers = static::$parser->getListLawyers($dom);
+        $lawyers = $this->invokeMethod(static::$parser, 'getListLawyers', [$dom]);
         $this->assertIsArray($lawyers);
         $this->assertCount($count, $lawyers);
 
@@ -187,11 +207,15 @@ class DomParserTest extends TestCase
      * @throws \PHPHtmlParser\Exceptions\CircularException
      * @throws \PHPHtmlParser\Exceptions\CurlException
      * @throws \PHPHtmlParser\Exceptions\StrictException
+     * @throws \ReflectionException
      */
     public function testGetFullLawyer(string $resource, DetailLawyer $exampleLawyer): void
     {
         $dom = (new Dom())->load($resource);
-        $lawyer = static::$parser->getFullLawyer($dom);
+        /**
+         * @var DetailLawyer $lawyer
+         */
+        $lawyer = $this->invokeMethod(static::$parser, 'getFullLawyer', [$dom]);
 
         $this->assertEquals($exampleLawyer->getChamberOfLaw(), $lawyer->getChamberOfLaw());
 

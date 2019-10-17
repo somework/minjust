@@ -34,6 +34,10 @@ class ClientTest extends TestCase
     public function listProvider(): array
     {
         return [
+            'empty'                       => [
+                'formData' => [],
+                'search'   => '01/102',
+            ],
             'Михайлов'                    => [
                 'formData' => [
                     FindRequest::FULL_NAME => 'михайлов олег николаевич',
@@ -47,6 +51,40 @@ class ClientTest extends TestCase
                     FindRequest::STATUS    => 4,
                 ],
                 'search'   => '03/2165',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider detailProvider
+     *
+     * @param string $url
+     * @param string $search
+     *
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
+    public function testDetail(string $url, string $search): void
+    {
+        $client = new Client(
+            new GuzzleClient(),
+            new RequestFactory(),
+            new StreamFactory()
+        );
+
+        $body = $client->detail($url);
+        $this->assertStringContainsString($search, $body);
+    }
+
+    public function detailProvider(): array
+    {
+        return [
+            'Михайлов'                    => [
+                'url'    => '/lawyers/show/1610663',
+                'search' => 'Адвокатская палата г. Москвы',
+            ],
+            'Белоусова Надежда Сергеевна' => [
+                'url'    => '/lawyers/show/1625881',
+                'search' => 'г. Уфа, ул. К.Маркса, 3б',
             ],
         ];
     }

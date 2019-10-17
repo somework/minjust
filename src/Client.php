@@ -2,28 +2,35 @@
 
 namespace SomeWork\Minjust;
 
+use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
 class Client
 {
+    /**
+     * @var string
+     */
     private const SERVICE_URL = 'http://lawyers.minjust.ru';
 
+    /**
+     * @var string
+     */
     private const LIST_URL = Client::SERVICE_URL . '/Lawyers';
 
     /**
-     * @var \Psr\Http\Client\ClientInterface
+     * @var ClientInterface
      */
     private $client;
 
     /**
-     * @var \Psr\Http\Message\RequestFactoryInterface
+     * @var RequestFactoryInterface
      */
     private $requestFactory;
 
     /**
-     * @var \Psr\Http\Message\StreamFactoryInterface
+     * @var StreamFactoryInterface
      */
     private $streamFactory;
 
@@ -41,7 +48,7 @@ class Client
      * @param array $formData
      *
      * @return string
-     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws ClientExceptionInterface
      */
     public function list(array $formData = []): string
     {
@@ -68,7 +75,7 @@ class Client
      * @param string $url
      *
      * @return string
-     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws ClientExceptionInterface
      */
     public function detail(string $url): string
     {

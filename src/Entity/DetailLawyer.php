@@ -10,7 +10,7 @@ class DetailLawyer extends Lawyer
     protected $chamberOfLaw;
 
     /**
-     * @var \SomeWork\Minjust\Entity\LawFormation|null
+     * @var LawFormation|null
      */
     protected $lawFormation;
 
@@ -52,7 +52,7 @@ class DetailLawyer extends Lawyer
     }
 
     /**
-     * @return \SomeWork\Minjust\Entity\LawFormation|null
+     * @return LawFormation|null
      */
     public function getLawFormation(): ?LawFormation
     {
@@ -60,7 +60,7 @@ class DetailLawyer extends Lawyer
     }
 
     /**
-     * @param \SomeWork\Minjust\Entity\LawFormation|null $lawFormation
+     * @param LawFormation|null $lawFormation
      *
      * @return DetailLawyer
      */

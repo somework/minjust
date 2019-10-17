@@ -2,17 +2,19 @@
 
 namespace SomeWork\Minjust;
 
+use SomeWork\Minjust\Entity\Lawyer;
+use SomeWork\Minjust\Entity\DetailLawyer;
 use Generator;
 
 class FindResponse
 {
     /**
-     * @var \SomeWork\Minjust\Entity\Lawyer[]
+     * @var Lawyer[]
      */
     protected $elements = [];
 
     /**
-     * @var \Generator|\SomeWork\Minjust\Entity\DetailLawyer[]
+     * @var Generator|DetailLawyer[]
      */
     protected $fullElements;
 
@@ -124,7 +126,7 @@ class FindResponse
     }
 
     /**
-     * @return \Generator|\SomeWork\Minjust\Entity\DetailLawyer[]
+     * @return Generator|DetailLawyer[]
      */
     public function getFullElements()
     {
@@ -132,7 +134,7 @@ class FindResponse
     }
 
     /**
-     * @param \Generator|\SomeWork\Minjust\Entity\DetailLawyer[] $fullElements
+     * @param Generator|DetailLawyer[] $fullElements
      *
      * @return static
      */

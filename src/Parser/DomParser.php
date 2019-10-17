@@ -1,18 +1,23 @@
 <?php
 
-namespace SomeWork\Minjust;
+namespace SomeWork\Minjust\Parser;
 
+use PHPHtmlParser\Dom\HtmlNode;
+use PHPHtmlParser\Exceptions\ChildNotFoundException;
+use PHPHtmlParser\Exceptions\NotLoadedException;
+use PHPHtmlParser\Dom\Collection;
 use PHPHtmlParser\Dom;
 use SomeWork\Minjust\Entity\DetailLawyer;
 use SomeWork\Minjust\Entity\LawFormation;
 use SomeWork\Minjust\Entity\Lawyer;
+use SomeWork\Minjust\FindResponse;
 
 class DomParser implements ParserInterface
 {
-    public function getTotalPage(Dom $dom): int
+    protected function getTotalPage(Dom $dom): int
     {
         /**
-         * @var \PHPHtmlParser\Dom\HtmlNode[] $collection
+         * @var HtmlNode[] $collection
          */
         $collection = $dom->find('div.pagination', 0)->find('a.step')->toArray();
         if (0 === count($collection)) {
@@ -24,7 +29,7 @@ class DomParser implements ParserInterface
         return $lastStep > $currentPage ? $lastStep : $currentPage;
     }
 
-    public function getCurrentPage(Dom $dom): int
+    protected function getCurrentPage(Dom $dom): int
     {
         if ($span = $dom->find('span.currentStep', 0)) {
             return (int) $span->text();
@@ -36,23 +41,23 @@ class DomParser implements ParserInterface
     /**
      * @param \PHPHtmlParser\Dom $dom
      *
-     * @return \SomeWork\Minjust\Entity\Lawyer[]
-     * @throws \PHPHtmlParser\Exceptions\ChildNotFoundException
-     * @throws \PHPHtmlParser\Exceptions\NotLoadedException
+     * @return Lawyer[]
+     * @throws ChildNotFoundException
+     * @throws NotLoadedException
      */
-    public function getListLawyers(Dom $dom): array
+    protected function getListLawyers(Dom $dom): array
     {
         $data = [];
         /**
-         * @var Dom\HtmlNode[]|\PHPHtmlParser\Dom\Collection $nodes
+         * @var Dom\HtmlNode[]|Collection $nodes
          */
         $nodes = $dom->find('table.persons > tbody > tr');
         foreach ($nodes as $node) {
             /**
-             * @var Dom\HtmlNode[]|\PHPHtmlParser\Dom\Collection $tds
+             * @var Dom\HtmlNode[]|Collection $tds
              */
             $tds = $node->find('td');
-            $tds = array_filter($tds->toArray(), static function (Dom\HtmlNode $node) {
+            $tds = array_filter($tds->toArray(), static function (HtmlNode $node) {
                 return $node->outerHtml() !== '' && $node->getAttribute('class') !== 'empty';
             });
             $data[] = (new Lawyer())
@@ -67,7 +72,7 @@ class DomParser implements ParserInterface
         return $data;
     }
 
-    public function getFullLawyer(Dom $dom): DetailLawyer
+    protected function getFullLawyer(Dom $dom): DetailLawyer
     {
         $nodes = $dom->find('.floating > p.row')->toArray();
 
@@ -85,6 +90,26 @@ class DomParser implements ParserInterface
             ->setPhone(trim($nodes[13]->text()))
             ->setEmail(trim($nodes[15]->text()));
 
-        return $formation->getOrganizationalForm() ? $formation : null;
+        return $formation->getOrganizationalForm() !== '' ? $formation : null;
+    }
+
+    public function list(string $body): FindResponse
+    {
+        $dom = (new Dom())->loadStr($body);
+
+        $findResponse = new FindResponse();
+        $findResponse
+            ->setPage($this->getCurrentPage($dom))
+            ->setTotalPage($this->getTotalPage($dom))
+            ->setElements($this->getListLawyers($dom));
+
+        return $findResponse;
+    }
+
+    public function detail(string $body): DetailLawyer
+    {
+        $dom = (new Dom())->loadStr($body);
+
+        return $this->getFullLawyer($dom);
     }
 }
