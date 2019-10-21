@@ -2,8 +2,9 @@
 
 namespace SomeWork\Minjust;
 
-use Psr\Http\Client\ClientExceptionInterface;
 use Generator;
+use Psr\Http\Client\ClientExceptionInterface;
+use SomeWork\Minjust\Entity\Lawyer;
 use SomeWork\Minjust\Parser\ParserInterface;
 
 class Service
@@ -24,6 +25,12 @@ class Service
         $this->parser = $parser;
     }
 
+    /**
+     * @param \SomeWork\Minjust\FindRequest $findRequest
+     *
+     * @return \Generator
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
     public function findAll(FindRequest $findRequest): Generator
     {
         return $this->findFromTo($findRequest, 1, 0);
@@ -31,8 +38,8 @@ class Service
 
     /**
      * @param FindRequest $findRequest
-     * @param int                           $startPage
-     * @param int                           $endPage
+     * @param int         $startPage
+     * @param int         $endPage
      *
      * @return \Generator
      * @throws ClientExceptionInterface
@@ -43,7 +50,7 @@ class Service
         $findRequest->setOffset(($startPage - 1) * $findRequest->getMax());
         $findResponse = $this->find($findRequest);
 
-        yield from $findRequest->isFullData() ? $findResponse->getFullElements() : $findResponse->getElements();
+        yield from $findRequest->isFullData() ? $findResponse->getDetailLawyers() : $findResponse->getLawyers();
         if ($findResponse->getTotalPage() === 1) {
             return;
         }
@@ -54,8 +61,8 @@ class Service
             $endPage = $endPage < $findResponse->getTotalPage() ? $endPage : $findResponse->getTotalPage();
             $findRequest->setOffset($i * $findRequest->getMax());
             yield from $findRequest->isFullData() ?
-                $this->find($findRequest)->getFullElements() :
-                $this->find($findRequest)->getElements();
+                $this->find($findRequest)->getDetailLawyers() :
+                $this->find($findRequest)->getLawyers();
         }
     }
 
@@ -67,8 +74,29 @@ class Service
      */
     public function find(FindRequest $findRequest): FindResponse
     {
-        return $this->parser->list(
+        $findResponse = $this->parser->list(
             $this->client->list($findRequest->getFormData())
         );
+
+        $findResponse->setDetailLawyersGenerator(
+            $this->getFullElementsGenerator($findResponse->getLawyers())
+        );
+
+        return $findResponse;
+    }
+
+    /**
+     * @param Lawyer[] $elements
+     *
+     * @return \Generator
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
+    protected function getFullElementsGenerator(array $elements): ?Generator
+    {
+        foreach ($elements as $element) {
+            yield $this->parser->detail(
+                $this->client->detail($element->getUrl())
+            );
+        }
     }
 }

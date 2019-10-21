@@ -41,8 +41,8 @@ abstract class AbstractParserTest extends TestCase
 
         $this->assertEquals($page, $response->getPage());
         $this->assertEquals($totalPages, $response->getTotalPage());
-        $this->assertCount($count, $response->getElements());
-        foreach ($response->getElements() as $element) {
+        $this->assertCount($count, $response->getLawyers());
+        foreach ($response->getLawyers() as $element) {
             $this->assertInstanceOf(Lawyer::class, $element);
         }
     }

@@ -101,7 +101,7 @@ class DomParser implements ParserInterface
         $findResponse
             ->setPage($this->getCurrentPage($dom))
             ->setTotalPage($this->getTotalPage($dom))
-            ->setElements($this->getListLawyers($dom));
+            ->setLawyers($this->getListLawyers($dom));
 
         return $findResponse;
     }
