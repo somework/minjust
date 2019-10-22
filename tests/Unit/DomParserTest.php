@@ -2,6 +2,7 @@
 
 namespace SomeWork\Minjust\Tests\Unit;
 
+use Iterator;
 use PHPHtmlParser\Dom;
 use ReflectionClass;
 use SomeWork\Minjust\Entity\DetailLawyer;
@@ -123,77 +124,71 @@ class DomParserTest extends AbstractParserTest
         }
     }
 
-    public function getPageProvider(): array
+    public function getPageProvider(): Iterator
     {
-        return [
-            'one-page'            => [
-                'resource' => dirname(__DIR__) . '/data/one-page.html',
-                'page'     => 1,
-            ],
-            'many-page'           => [
-                'resource' => dirname(__DIR__) . '/data/many-page.html',
-                'page'     => 1,
-            ],
-            'many-page-not-first' => [
-                'resource' => dirname(__DIR__) . '/data/many-page-not-first.html',
-                'page'     => 6,
-            ],
-            'rewind-not-first'    => [
-                'resource' => dirname(__DIR__) . '/data/rewind-not-first.html',
-                'page'     => 2,
-            ],
-            'web'                 => [
-                'resource' => 'http://lawyers.minjust.ru/Lawyers',
-                'page'     => 1,
-            ],
+        yield 'one-page' => [
+            'resource' => dirname(__DIR__) . '/data/one-page.html',
+            'page'     => 1,
+        ];
+        yield 'many-page' => [
+            'resource' => dirname(__DIR__) . '/data/many-page.html',
+            'page'     => 1,
+        ];
+        yield 'many-page-not-first' => [
+            'resource' => dirname(__DIR__) . '/data/many-page-not-first.html',
+            'page'     => 6,
+        ];
+        yield 'rewind-not-first' => [
+            'resource' => dirname(__DIR__) . '/data/rewind-not-first.html',
+            'page'     => 2,
+        ];
+        yield 'web' => [
+            'resource' => 'http://lawyers.minjust.ru/Lawyers',
+            'page'     => 1,
         ];
     }
 
-    public function getTotalPageProvider(): array
+    public function getTotalPageProvider(): Iterator
     {
-        return [
-            'one-page'            => [
-                'resource' => dirname(__DIR__) . '/data/one-page.html',
-                'pages'    => 1,
-            ],
-            'many-page'           => [
-                'resource' => dirname(__DIR__) . '/data/many-page.html',
-                'pages'    => 6657,
-            ],
-            'many-page-not-first' => [
-                'resource' => dirname(__DIR__) . '/data/many-page-not-first.html',
-                'pages'    => 58,
-            ],
-            'rewind-not-first'    => [
-                'resource' => dirname(__DIR__) . '/data/rewind-not-first.html',
-                'pages'    => 2,
-            ],
+        yield 'one-page' => [
+            'resource' => dirname(__DIR__) . '/data/one-page.html',
+            'pages'    => 1,
+        ];
+        yield 'many-page' => [
+            'resource' => dirname(__DIR__) . '/data/many-page.html',
+            'pages'    => 6657,
+        ];
+        yield 'many-page-not-first' => [
+            'resource' => dirname(__DIR__) . '/data/many-page-not-first.html',
+            'pages'    => 58,
+        ];
+        yield 'rewind-not-first' => [
+            'resource' => dirname(__DIR__) . '/data/rewind-not-first.html',
+            'pages'    => 2,
         ];
     }
 
-    public function getListLawyersProvider(): array
+    public function getListLawyersProvider(): Iterator
     {
-        return [
-            'one-page'            => [
-                'resource' => dirname(__DIR__) . '/data/one-page.html',
-                'count'    => 12,
-            ],
-            'many-page'           => [
-                'resource' => dirname(__DIR__) . '/data/many-page.html',
-                'count'    => 20,
-            ],
-            'many-page-not-first' => [
-                'resource' => dirname(__DIR__) . '/data/many-page-not-first.html',
-                'count'    => 20,
-            ],
-            'rewind-not-first'    => [
-                'resource' => dirname(__DIR__) . '/data/rewind-not-first.html',
-                'count'    => 8,
-            ],
-            'web'                 => [
-                'resource' => 'http://lawyers.minjust.ru/Lawyers',
-                'count'    => 20,
-            ],
+        yield 'one-page' => [
+            'resource' => dirname(__DIR__) . '/data/one-page.html',
+            'count'    => 12,
+        ];
+        yield 'many-page' => [
+            'resource' => dirname(__DIR__) . '/data/many-page.html',
+            'count'    => 20,
+        ];
+        yield 'many-page-not-first' => [
+            'resource' => dirname(__DIR__) . '/data/many-page-not-first.html',
+            'count'    => 20,
+        ];
+        yield 'rewind-not-first' => [
+            'resource' => dirname(__DIR__) . '/data/rewind-not-first.html',
+            'count'    => 8,
+        ];
+        yield 'web' => [
+            'resource' => 'http://lawyers.minjust.ru/Lawyers',
+            'count'    => 20,
         ];
     }
 
@@ -228,22 +223,20 @@ class DomParserTest extends AbstractParserTest
         $this->assertEquals($exampleLawFormation->getPhone(), $lawFormation->getPhone());
     }
 
-    public function getFullLawyerProvider(): array
+    public function getFullLawyerProvider(): Iterator
     {
-        return [
-            'web' => [
-                'resource' => 'http://lawyers.minjust.ru/lawyers/show/1532185',
-                'lawyer'   => (new DetailLawyer())
-                    ->setChamberOfLaw('Адвокатская палата Амурской области')
-                    ->setLawFormation(
-                        (new LawFormation())
-                            ->setOrganizationalForm('Адвокатские кабинеты')
-                            ->setName('Адвокатский кабинет')
-                            ->setAddress('')
-                            ->setPhone('. 89098119329')
-                            ->setEmail('E-mail: zkabityak@mail.ru')
-                    ),
-            ],
+        yield 'web' => [
+            'resource' => 'http://lawyers.minjust.ru/lawyers/show/1532185',
+            'lawyer'   => (new DetailLawyer())
+                ->setChamberOfLaw('Адвокатская палата Амурской области')
+                ->setLawFormation(
+                    (new LawFormation())
+                        ->setOrganizationalForm('Адвокатские кабинеты')
+                        ->setName('Адвокатский кабинет')
+                        ->setAddress('')
+                        ->setPhone('. 89098119329')
+                        ->setEmail('E-mail: zkabityak@mail.ru')
+                ),
         ];
     }
 }

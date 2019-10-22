@@ -26,10 +26,10 @@ class Service
     }
 
     /**
-     * @param \SomeWork\Minjust\FindRequest $findRequest
+     * @param FindRequest $findRequest
      *
-     * @return \Generator
-     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @return Generator
+     * @throws ClientExceptionInterface
      */
     public function findAll(FindRequest $findRequest): Generator
     {
@@ -41,7 +41,7 @@ class Service
      * @param int         $startPage
      * @param int         $endPage
      *
-     * @return \Generator
+     * @return Generator
      * @throws ClientExceptionInterface
      * @todo Упростить логику метода
      */
@@ -79,23 +79,23 @@ class Service
         );
 
         $findResponse->setDetailLawyersGenerator(
-            $this->getFullElementsGenerator($findResponse->getLawyers())
+            $this->getDetailLawyersGenerator($findResponse->getLawyers())
         );
 
         return $findResponse;
     }
 
     /**
-     * @param Lawyer[] $elements
+     * @param Lawyer[] $lawyers
      *
-     * @return \Generator
-     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @return Generator
+     * @throws ClientExceptionInterface
      */
-    protected function getFullElementsGenerator(array $elements): ?Generator
+    protected function getDetailLawyersGenerator(array $lawyers): Generator
     {
-        foreach ($elements as $element) {
+        foreach ($lawyers as $lawyer) {
             yield $this->parser->detail(
-                $this->client->detail($element->getUrl())
+                $this->client->detail($lawyer->getUrl())
             );
         }
     }

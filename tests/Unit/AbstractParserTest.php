@@ -2,6 +2,7 @@
 
 namespace SomeWork\Minjust\Tests\Unit;
 
+use Iterator;
 use PHPUnit\Framework\TestCase;
 use SomeWork\Minjust\Entity\LawFormation;
 use SomeWork\Minjust\Entity\Lawyer;
@@ -42,9 +43,7 @@ abstract class AbstractParserTest extends TestCase
         $this->assertEquals($page, $response->getPage());
         $this->assertEquals($totalPages, $response->getTotalPage());
         $this->assertCount($count, $response->getLawyers());
-        foreach ($response->getLawyers() as $element) {
-            $this->assertInstanceOf(Lawyer::class, $element);
-        }
+        $this->assertContainsOnlyInstancesOf(Lawyer::class, $response->getLawyers());
     }
 
     /**
@@ -82,59 +81,55 @@ abstract class AbstractParserTest extends TestCase
         }
     }
 
-    public function listProvider(): array
+    public function listProvider(): Iterator
     {
-        return [
-            [
-                dirname(__DIR__) . '/data/one-page.html',
-                'page'       => 1,
-                'totalPages' => 1,
-                'count'      => 12,
-            ],
-            [
-                dirname(__DIR__) . '/data/rewind-not-first.html',
-                'page'       => 2,
-                'totalPages' => 2,
-                'count'      => 8,
-            ],
-            [
-                dirname(__DIR__) . '/data/many-page-not-first.html',
-                'page'       => 6,
-                'totalPages' => 58,
-                'count'      => 20,
-            ],
-            [
-                dirname(__DIR__) . '/data/many-page.html',
-                'page'       => 1,
-                'totalPages' => 6657,
-                'count'      => 20,
-            ],
-            'web' => [
-                'http://lawyers.minjust.ru/Lawyers?regnumber=77/2340',
-                'page'       => 1,
-                'totalPages' => 1,
-                'count'      => 1,
-            ],
+        yield [
+            dirname(__DIR__) . '/data/one-page.html',
+            'page'       => 1,
+            'totalPages' => 1,
+            'count'      => 12,
+        ];
+        yield [
+            dirname(__DIR__) . '/data/rewind-not-first.html',
+            'page'       => 2,
+            'totalPages' => 2,
+            'count'      => 8,
+        ];
+        yield [
+            dirname(__DIR__) . '/data/many-page-not-first.html',
+            'page'       => 6,
+            'totalPages' => 58,
+            'count'      => 20,
+        ];
+        yield [
+            dirname(__DIR__) . '/data/many-page.html',
+            'page'       => 1,
+            'totalPages' => 6657,
+            'count'      => 20,
+        ];
+        yield 'web' => [
+            'http://lawyers.minjust.ru/Lawyers?regnumber=77/2340',
+            'page'       => 1,
+            'totalPages' => 1,
+            'count'      => 1,
         ];
     }
 
-    public function detailProvider(): array
+    public function detailProvider(): Iterator
     {
-        return [
-            'web Михайлов'  => [
-                'http://lawyers.minjust.ru/lawyers/show/1610663',
-                'Адвокатская палата г. Москвы',
-                null,
-            ],
-            'web Трофимова' => [
-                'http://lawyers.minjust.ru/lawyers/show/1529728',
-                'Палата адвокатов Республики Алтай',
-                (new LawFormation())
-                    ->setOrganizationalForm('Коллегии адвокатов')
-                    ->setName('Коллегия адвокатов Республики Алтай')
-                    ->setAddress('г.Бийск, ул.Л.Толстого, 160, кв.12')
-                    ->setPhone('89609626799'),
-            ],
+        yield 'web Михайлов' => [
+            'http://lawyers.minjust.ru/lawyers/show/1610663',
+            'Адвокатская палата г. Москвы',
+            null,
+        ];
+        yield 'web Трофимова' => [
+            'http://lawyers.minjust.ru/lawyers/show/1529728',
+            'Палата адвокатов Республики Алтай',
+            (new LawFormation())
+                ->setOrganizationalForm('Коллегии адвокатов')
+                ->setName('Коллегия адвокатов Республики Алтай')
+                ->setAddress('г.Бийск, ул.Л.Толстого, 160, кв.12')
+                ->setPhone('89609626799'),
         ];
     }
 }

@@ -5,6 +5,7 @@ namespace SomeWork\Minjust\Tests\Unit;
 use DivineOmega\Psr18GuzzleAdapter\Client as GuzzleClient;
 use Http\Factory\Guzzle\RequestFactory;
 use Http\Factory\Guzzle\StreamFactory;
+use Iterator;
 use PHPUnit\Framework\TestCase;
 use SomeWork\Minjust\Client;
 use SomeWork\Minjust\FindRequest;
@@ -31,27 +32,25 @@ class ClientTest extends TestCase
         $this->assertStringContainsString($search, $body);
     }
 
-    public function listProvider(): array
+    public function listProvider(): Iterator
     {
-        return [
-            'empty'                       => [
-                'formData' => [],
-                'search'   => '01/102',
+        yield 'empty' => [
+            'formData' => [],
+            'search'   => '01/102',
+        ];
+        yield 'Михайлов' => [
+            'formData' => [
+                FindRequest::FULL_NAME => 'михайлов олег николаевич',
             ],
-            'Михайлов'                    => [
-                'formData' => [
-                    FindRequest::FULL_NAME => 'михайлов олег николаевич',
-                ],
-                'search'   => '77/2340',
+            'search'   => '77/2340',
+        ];
+        yield 'Белоусова Надежда Сергеевна' => [
+            'formData' => [
+                FindRequest::OFFSET    => 20,
+                FindRequest::FULL_NAME => 'б',
+                FindRequest::STATUS    => 4,
             ],
-            'Белоусова Надежда Сергеевна' => [
-                'formData' => [
-                    FindRequest::OFFSET    => 20,
-                    FindRequest::FULL_NAME => 'б',
-                    FindRequest::STATUS    => 4,
-                ],
-                'search'   => '03/2165',
-            ],
+            'search'   => '03/2165',
         ];
     }
 
@@ -75,17 +74,15 @@ class ClientTest extends TestCase
         $this->assertStringContainsString($search, $body);
     }
 
-    public function detailProvider(): array
+    public function detailProvider(): Iterator
     {
-        return [
-            'Михайлов'                    => [
-                'url'    => '/lawyers/show/1610663',
-                'search' => 'Адвокатская палата г. Москвы',
-            ],
-            'Белоусова Надежда Сергеевна' => [
-                'url'    => '/lawyers/show/1625881',
-                'search' => 'г. Уфа, ул. К.Маркса, 3б',
-            ],
+        yield 'Михайлов' => [
+            'url'    => '/lawyers/show/1610663',
+            'search' => 'Адвокатская палата г. Москвы',
+        ];
+        yield 'Белоусова Надежда Сергеевна' => [
+            'url'    => '/lawyers/show/1625881',
+            'search' => 'г. Уфа, ул. К.Маркса, 3б',
         ];
     }
 }
