@@ -2,11 +2,11 @@
 
 namespace SomeWork\Minjust\Parser;
 
+use PHPHtmlParser\Dom;
+use PHPHtmlParser\Dom\Collection;
 use PHPHtmlParser\Dom\HtmlNode;
 use PHPHtmlParser\Exceptions\ChildNotFoundException;
 use PHPHtmlParser\Exceptions\NotLoadedException;
-use PHPHtmlParser\Dom\Collection;
-use PHPHtmlParser\Dom;
 use SomeWork\Minjust\Entity\DetailLawyer;
 use SomeWork\Minjust\Entity\LawFormation;
 use SomeWork\Minjust\Entity\Lawyer;
@@ -14,6 +14,28 @@ use SomeWork\Minjust\FindResponse;
 
 class DomParser implements ParserInterface
 {
+    public function list(string $body): FindResponse
+    {
+        $dom = (new Dom())->loadStr($body);
+
+        $findResponse = new FindResponse();
+        $findResponse
+            ->setPage($this->getCurrentPage($dom))
+            ->setTotalPage($this->getTotalPage($dom))
+            ->setLawyers($this->getListLawyers($dom));
+
+        return $findResponse;
+    }
+
+    protected function getCurrentPage(Dom $dom): int
+    {
+        if ($span = $dom->find('span.currentStep', 0)) {
+            return (int) $span->text();
+        }
+
+        return 1;
+    }
+
     protected function getTotalPage(Dom $dom): int
     {
         /**
@@ -27,15 +49,6 @@ class DomParser implements ParserInterface
         $currentPage = $this->getCurrentPage($dom);
 
         return $lastStep > $currentPage ? $lastStep : $currentPage;
-    }
-
-    protected function getCurrentPage(Dom $dom): int
-    {
-        if ($span = $dom->find('span.currentStep', 0)) {
-            return (int) $span->text();
-        }
-
-        return 1;
     }
 
     /**
@@ -72,6 +85,13 @@ class DomParser implements ParserInterface
         return $data;
     }
 
+    public function detail(string $body): DetailLawyer
+    {
+        $dom = (new Dom())->loadStr($body);
+
+        return $this->getFullLawyer($dom);
+    }
+
     protected function getFullLawyer(Dom $dom): DetailLawyer
     {
         $nodes = $dom->find('.floating > p.row')->toArray();
@@ -91,25 +111,5 @@ class DomParser implements ParserInterface
             ->setEmail(trim($nodes[15]->text()));
 
         return $formation->getOrganizationalForm() !== '' ? $formation : null;
-    }
-
-    public function list(string $body): FindResponse
-    {
-        $dom = (new Dom())->loadStr($body);
-
-        $findResponse = new FindResponse();
-        $findResponse
-            ->setPage($this->getCurrentPage($dom))
-            ->setTotalPage($this->getTotalPage($dom))
-            ->setLawyers($this->getListLawyers($dom));
-
-        return $findResponse;
-    }
-
-    public function detail(string $body): DetailLawyer
-    {
-        $dom = (new Dom())->loadStr($body);
-
-        return $this->getFullLawyer($dom);
     }
 }
