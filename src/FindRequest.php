@@ -2,24 +2,53 @@
 
 namespace SomeWork\Minjust;
 
+use InvalidArgumentException;
+
 class FindRequest
 {
-    private const FULL_NAME = 'lawyername';
+    /**
+     * @var string
+     */
+    public const FULL_NAME = 'lawyername';
 
-    private const REGISTER_NUMBER = 'regnumber';
+    /**
+     * @var string
+     */
+    public const REGISTER_NUMBER = 'regnumber';
 
-    private const CERTIFICATE_NUMBER = 'lawicard';
+    /**
+     * @var string
+     */
+    public const CERTIFICATE_NUMBER = 'lawicard';
 
-    private const STATUS = 'lawstatus';
+    /**
+     * @var string
+     */
+    public const STATUS = 'lawstatus';
 
-    private const FORM_OF_LEGAL_PRACTICE = 'formation';
+    /**
+     * @var string
+     */
+    public const FORM_OF_LEGAL_PRACTICE = 'formation';
 
-    private const TERRITORIAL_SUBJECT = 'lawregion';
+    /**
+     * @var string
+     */
+    public const TERRITORIAL_SUBJECT = 'lawregion';
 
-    private const MAX = 'max';
+    /**
+     * @var string
+     */
+    public const MAX = 'max';
 
-    private const OFFSET = 'offset';
+    /**
+     * @var string
+     */
+    public const OFFSET = 'offset';
 
+    /**
+     * @var int
+     */
     private const MAX_VALUE_MAX = 100;
 
     /**
@@ -214,7 +243,7 @@ class FindRequest
     public function setMax(int $max): FindRequest
     {
         if ($max > static::MAX_VALUE_MAX) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf('Maximum value for "%s" is %s', static::MAX, static::MAX_VALUE_MAX)
             );
         }
@@ -244,6 +273,14 @@ class FindRequest
     }
 
     /**
+     * @return bool
+     */
+    public function isFullData(): bool
+    {
+        return $this->fullData;
+    }
+
+    /**
      * @param bool $fullData
      *
      * @return FindRequest
@@ -253,13 +290,5 @@ class FindRequest
         $this->fullData = $fullData;
 
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFullData(): bool
-    {
-        return $this->fullData;
     }
 }

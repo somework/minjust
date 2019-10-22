@@ -2,7 +2,7 @@
 
 namespace SomeWork\Minjust\Entity;
 
-class FullLawyer extends Lawyer
+class DetailLawyer extends Lawyer
 {
     /**
      * @var string
@@ -10,11 +10,11 @@ class FullLawyer extends Lawyer
     protected $chamberOfLaw;
 
     /**
-     * @var \SomeWork\Minjust\Entity\LawFormation|null
+     * @var LawFormation|null
      */
     protected $lawFormation;
 
-    public static function init(Lawyer $lawyer): FullLawyer
+    public static function init(Lawyer $lawyer): DetailLawyer
     {
         return (new self())
             ->loadFromLawyer($lawyer);
@@ -42,9 +42,9 @@ class FullLawyer extends Lawyer
     /**
      * @param string $chamberOfLaw
      *
-     * @return FullLawyer
+     * @return DetailLawyer
      */
-    public function setChamberOfLaw(string $chamberOfLaw): FullLawyer
+    public function setChamberOfLaw(string $chamberOfLaw): DetailLawyer
     {
         $this->chamberOfLaw = $chamberOfLaw;
 
@@ -52,7 +52,7 @@ class FullLawyer extends Lawyer
     }
 
     /**
-     * @return \SomeWork\Minjust\Entity\LawFormation|null
+     * @return LawFormation|null
      */
     public function getLawFormation(): ?LawFormation
     {
@@ -60,11 +60,11 @@ class FullLawyer extends Lawyer
     }
 
     /**
-     * @param \SomeWork\Minjust\Entity\LawFormation|null $lawFormation
+     * @param LawFormation|null $lawFormation
      *
-     * @return FullLawyer
+     * @return DetailLawyer
      */
-    public function setLawFormation(?LawFormation $lawFormation): FullLawyer
+    public function setLawFormation(?LawFormation $lawFormation): DetailLawyer
     {
         $this->lawFormation = $lawFormation;
 

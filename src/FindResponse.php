@@ -2,17 +2,21 @@
 
 namespace SomeWork\Minjust;
 
+use Generator;
+use SomeWork\Minjust\Entity\DetailLawyer;
+use SomeWork\Minjust\Entity\Lawyer;
+
 class FindResponse
 {
     /**
-     * @var \SomeWork\Minjust\Entity\Lawyer[]
+     * @var Lawyer[]
      */
-    protected $elements = [];
+    protected $lawyers = [];
 
     /**
-     * @var \Generator|\SomeWork\Minjust\Entity\FullLawyer[]
+     * @var Generator|DetailLawyer[]
      */
-    protected $fullElements;
+    protected $detailLawyers;
 
     /**
      * @var int
@@ -32,19 +36,19 @@ class FindResponse
     /**
      * @return array
      */
-    public function getElements(): array
+    public function getLawyers(): array
     {
-        return $this->elements;
+        return $this->lawyers;
     }
 
     /**
-     * @param array $elements
+     * @param array $lawyers
      *
      * @return FindResponse
      */
-    public function setElements(array $elements): FindResponse
+    public function setLawyers(array $lawyers): FindResponse
     {
-        $this->elements = $elements;
+        $this->lawyers = $lawyers;
 
         return $this;
     }
@@ -110,33 +114,33 @@ class FindResponse
     }
 
     /**
-     * @param array $element
+     * @param \SomeWork\Minjust\Entity\Lawyer $lawyer
      *
      * @return FindResponse
      */
-    public function addElement(array $element): self
+    public function addLawyer(Lawyer $lawyer): self
     {
-        $this->elements[] = $element;
+        $this->lawyers[] = $lawyer;
 
         return $this;
     }
 
     /**
-     * @return \Generator|\SomeWork\Minjust\Entity\FullLawyer[]
+     * @return Generator|DetailLawyer[]
      */
-    public function getFullElements()
+    public function getDetailLawyers()
     {
-        return $this->fullElements;
+        return $this->detailLawyers;
     }
 
     /**
-     * @param \Generator|\SomeWork\Minjust\Entity\FullLawyer[] $fullElements
+     * @param Generator|DetailLawyer[] $detailLawyers
      *
      * @return static
      */
-    public function setFullElements(\Generator $fullElements): self
+    public function setDetailLawyersGenerator(Generator $detailLawyers): self
     {
-        $this->fullElements = $fullElements;
+        $this->detailLawyers = $detailLawyers;
 
         return $this;
     }

@@ -2,6 +2,11 @@
 
 namespace SomeWork\Minjust;
 
+use Generator;
+use Psr\Http\Client\ClientExceptionInterface;
+use SomeWork\Minjust\Entity\Lawyer;
+use SomeWork\Minjust\Parser\ParserInterface;
+
 class Service
 {
     /**
@@ -10,30 +15,42 @@ class Service
     private $client;
 
     /**
-     * @var Parser
+     * @var ParserInterface
      */
     private $parser;
 
-    public function __construct(Client $client, Parser $parser)
+    public function __construct(Client $client, ParserInterface $parser)
     {
-        /*
-         * @todo вынести в конструктор
-         */
         $this->client = $client;
         $this->parser = $parser;
     }
 
-    public function findAll(FindRequest $findRequest): \Generator
+    /**
+     * @param FindRequest $findRequest
+     *
+     * @return Generator
+     * @throws ClientExceptionInterface
+     */
+    public function findAll(FindRequest $findRequest): Generator
     {
         return $this->findFromTo($findRequest, 1, 0);
     }
 
-    public function findFromTo(FindRequest $findRequest, int $startPage = 1, int $endPage = 1): \Generator
+    /**
+     * @param FindRequest $findRequest
+     * @param int         $startPage
+     * @param int         $endPage
+     *
+     * @return Generator
+     * @throws ClientExceptionInterface
+     * @todo Упростить логику метода
+     */
+    public function findFromTo(FindRequest $findRequest, int $startPage = 1, int $endPage = 1): Generator
     {
         $findRequest->setOffset(($startPage - 1) * $findRequest->getMax());
         $findResponse = $this->find($findRequest);
 
-        yield from $findRequest->isFullData() ? $findResponse->getFullElements() : $findResponse->getElements();
+        yield from $findRequest->isFullData() ? $findResponse->getDetailLawyers() : $findResponse->getLawyers();
         if ($findResponse->getTotalPage() === 1) {
             return;
         }
@@ -44,8 +61,8 @@ class Service
             $endPage = $endPage < $findResponse->getTotalPage() ? $endPage : $findResponse->getTotalPage();
             $findRequest->setOffset($i * $findRequest->getMax());
             yield from $findRequest->isFullData() ?
-                $this->find($findRequest)->getFullElements() :
-                $this->find($findRequest)->getElements();
+                $this->find($findRequest)->getDetailLawyers() :
+                $this->find($findRequest)->getLawyers();
         }
     }
 
@@ -53,37 +70,31 @@ class Service
      * @param FindRequest $findRequest
      *
      * @return FindResponse
-     * @throws \PHPHtmlParser\Exceptions\ChildNotFoundException
-     * @throws \PHPHtmlParser\Exceptions\CircularException
-     * @throws \PHPHtmlParser\Exceptions\CurlException
-     * @throws \PHPHtmlParser\Exceptions\NotLoadedException
-     * @throws \PHPHtmlParser\Exceptions\StrictException
+     * @throws ClientExceptionInterface
      */
     public function find(FindRequest $findRequest): FindResponse
     {
-        $response = $this->parser->buildListResponse(
+        $findResponse = $this->parser->list(
             $this->client->list($findRequest->getFormData())
         );
 
-        $response->setFullElements(
-            $this->loadDetails(
-                $response->getElements()
-            )
+        $findResponse->setDetailLawyersGenerator(
+            $this->getDetailLawyersGenerator($findResponse->getLawyers())
         );
 
-        return $response;
+        return $findResponse;
     }
 
     /**
-     * @param \SomeWork\Minjust\Entity\Lawyer[] $lawyers
+     * @param Lawyer[] $lawyers
      *
-     * @return \Generator
+     * @return Generator
+     * @throws ClientExceptionInterface
      */
-    protected function loadDetails(array $lawyers): \Generator
+    protected function getDetailLawyersGenerator(array $lawyers): Generator
     {
         foreach ($lawyers as $lawyer) {
-            yield $this->parser->buildFullLawyer(
-                $lawyer,
+            yield $this->parser->detail(
                 $this->client->detail($lawyer->getUrl())
             );
         }
