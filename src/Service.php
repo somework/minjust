@@ -94,9 +94,10 @@ class Service
     protected function getDetailLawyersGenerator(array $lawyers): Generator
     {
         foreach ($lawyers as $lawyer) {
-            yield $this->parser->detail(
-                $this->client->detail($lawyer->getUrl())
-            );
+            yield $this
+                ->parser
+                ->detail($this->client->detail($lawyer->getUrl()))
+                ->loadFromLawyer($lawyer);
         }
     }
 }
