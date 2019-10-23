@@ -1,8 +1,9 @@
 <?php
 /** @noinspection PhpUnhandledExceptionInspection */
-
 namespace SomeWork\Minjust\Tests\Unit;
 
+use Psr\Http\Client\ClientExceptionInterface;
+use ReflectionException;
 use Exception;
 use Generator;
 use Iterator;
@@ -11,6 +12,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use SomeWork\Minjust\Client;
 use SomeWork\Minjust\Entity\DetailLawyer;
+use SomeWork\Minjust\Entity\LawFormation;
 use SomeWork\Minjust\Entity\Lawyer;
 use SomeWork\Minjust\FindRequest;
 use SomeWork\Minjust\FindResponse;
@@ -81,7 +83,7 @@ class ServiceTest extends TestCase
     /**
      * @param \SomeWork\Minjust\Entity\Lawyer $lawyer
      *
-     * @return \Generator
+     * @return Generator
      */
     protected function generateDetailLawyerGenerator(Lawyer $lawyer): Generator
     {
@@ -129,7 +131,7 @@ class ServiceTest extends TestCase
      *
      * @param bool $isMultiple
      *
-     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws ClientExceptionInterface
      */
     public function testFindFromToOffsetForMultiplePage(bool $isMultiple): void
     {
@@ -204,8 +206,11 @@ class ServiceTest extends TestCase
 
     public function testGetDetailLawyersGenerator(): void
     {
-        $lawyerFirst = DetailLawyer::init($this->generateLawyer());
-        $lawyerSecond = DetailLawyer::init($this->generateLawyer());
+        $detailFirst = $this->generateDetailLawyer();
+        $detailSecond = $this->generateDetailLawyer();
+
+        $lawyerFirst = $this->generateLawyer();
+        $lawyerSecond = $this->generateLawyer();
 
         $client = $this->createMock(Client::class);
         $client
@@ -216,26 +221,62 @@ class ServiceTest extends TestCase
         $parser
             ->expects($this->at(0))
             ->method('detail')
-            ->willReturn($lawyerFirst);
+            ->willReturn($detailFirst);
 
         $parser
             ->expects($this->at(1))
             ->method('detail')
-            ->willReturn($lawyerSecond);
+            ->willReturn($detailSecond);
 
         $service = new Service($client, $parser);
         $generator = $this->invokeMethod($service, 'getDetailLawyersGenerator', [[$lawyerFirst, $lawyerSecond]]);
 
         $this->assertInstanceOf(Generator::class, $generator);
 
+        /**
+         * @var DetailLawyer $lawyer
+         */
         $lawyer = $generator->current();
         $this->assertInstanceOf(DetailLawyer::class, $lawyer);
-        $this->assertEquals($lawyerFirst, $lawyer);
+        $this->assertEquals($lawyerFirst->getUrl(), $lawyer->getUrl());
+        $this->assertEquals($lawyerFirst->getTerritorialSubject(), $lawyer->getTerritorialSubject());
+        $this->assertEquals($lawyerFirst->getStatus(), $lawyer->getStatus());
+        $this->assertEquals($lawyerFirst->getCertificateNumber(), $lawyer->getCertificateNumber());
+        $this->assertEquals($lawyerFirst->getRegisterNumber(), $lawyer->getRegisterNumber());
+        $this->assertEquals($lawyerFirst->getFullName(), $lawyer->getFullName());
+        $this->assertEquals($detailFirst, $lawyer);
 
         $generator->next();
         $lawyer = $generator->current();
         $this->assertInstanceOf(DetailLawyer::class, $lawyer);
-        $this->assertEquals($lawyerSecond, $lawyer);
+        $this->assertEquals($lawyerSecond->getUrl(), $lawyer->getUrl());
+        $this->assertEquals($lawyerSecond->getTerritorialSubject(), $lawyer->getTerritorialSubject());
+        $this->assertEquals($lawyerSecond->getStatus(), $lawyer->getStatus());
+        $this->assertEquals($lawyerSecond->getCertificateNumber(), $lawyer->getCertificateNumber());
+        $this->assertEquals($lawyerSecond->getRegisterNumber(), $lawyer->getRegisterNumber());
+        $this->assertEquals($lawyerSecond->getFullName(), $lawyer->getFullName());
+        $this->assertEquals($detailSecond, $lawyer);
+    }
+
+    protected function generateDetailLawyer(?Lawyer $lawyer = null): DetailLawyer
+    {
+        try {
+            $id = md5(random_bytes(16));
+        } catch (Exception $exception) {
+            $id = md5(microtime(true));
+        }
+
+        $detailLawyer = (new DetailLawyer())
+            ->setChamberOfLaw('Палата ' . $id)
+            ->setLawFormation(
+                (new LawFormation())
+                    ->setPhone('88004443459')
+                    ->setAddress('г. Москва, ул. Беговая, д. 2')
+                    ->setName('ООО "Бреви Ману" ID: ' . $id)
+                    ->setEmail('pinchuk_iv@mnp.ru')
+            );
+
+        return $lawyer !== null ? $detailLawyer->loadFromLawyer($lawyer) : $detailLawyer;
     }
 
     /**
@@ -246,7 +287,7 @@ class ServiceTest extends TestCase
      * @param array   $parameters Array of parameters to pass into method.
      *
      * @return mixed Method return.
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function invokeMethod(&$object, $methodName, array $parameters = [])
     {
@@ -265,7 +306,7 @@ class ServiceTest extends TestCase
         $service = new Service($client, $parser);
 
         /**
-         * @var \Generator $generator
+         * @var Generator $generator
          */
         $generator = $this->invokeMethod($service, 'getDetailLawyersGenerator', [[]]);
         $this->assertInstanceOf(Generator::class, $generator);

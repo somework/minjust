@@ -11,7 +11,7 @@ use SomeWork\Minjust\Parser\ParserInterface;
 abstract class AbstractParserTest extends TestCase
 {
     /**
-     * @var \SomeWork\Minjust\Parser\ParserInterface
+     * @var ParserInterface
      */
     protected static $parser;
 

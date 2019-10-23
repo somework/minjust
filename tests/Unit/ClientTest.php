@@ -2,6 +2,7 @@
 
 namespace SomeWork\Minjust\Tests\Unit;
 
+use Psr\Http\Client\ClientExceptionInterface;
 use DivineOmega\Psr18GuzzleAdapter\Client as GuzzleClient;
 use Http\Factory\Guzzle\RequestFactory;
 use Http\Factory\Guzzle\StreamFactory;
@@ -18,7 +19,7 @@ class ClientTest extends TestCase
      * @param array  $formData
      * @param string $search
      *
-     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws ClientExceptionInterface
      */
     public function testList(array $formData, string $search): void
     {
@@ -60,7 +61,7 @@ class ClientTest extends TestCase
      * @param string $url
      * @param string $search
      *
-     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws ClientExceptionInterface
      */
     public function testDetail(string $url, string $search): void
     {

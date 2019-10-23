@@ -2,6 +2,11 @@
 
 namespace SomeWork\Minjust\Tests\Unit;
 
+use PHPHtmlParser\Exceptions\ChildNotFoundException;
+use PHPHtmlParser\Exceptions\CircularException;
+use PHPHtmlParser\Exceptions\CurlException;
+use PHPHtmlParser\Exceptions\StrictException;
+use ReflectionException;
 use Iterator;
 use PHPHtmlParser\Dom;
 use ReflectionClass;
@@ -27,11 +32,11 @@ class DomParserTest extends AbstractParserTest
      * @param string $resource
      * @param int    $pages
      *
-     * @throws \PHPHtmlParser\Exceptions\ChildNotFoundException
-     * @throws \PHPHtmlParser\Exceptions\CircularException
-     * @throws \PHPHtmlParser\Exceptions\CurlException
-     * @throws \PHPHtmlParser\Exceptions\StrictException
-     * @throws \ReflectionException
+     * @throws ChildNotFoundException
+     * @throws CircularException
+     * @throws CurlException
+     * @throws StrictException
+     * @throws ReflectionException
      */
     public function testGetTotalPage(string $resource, int $pages): void
     {
@@ -51,7 +56,7 @@ class DomParserTest extends AbstractParserTest
      * @param array   $parameters Array of parameters to pass into method.
      *
      * @return mixed Method return.
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function invokeMethod(&$object, $methodName, array $parameters = [])
     {
@@ -68,11 +73,11 @@ class DomParserTest extends AbstractParserTest
      * @param string $resource
      * @param int    $page
      *
-     * @throws \PHPHtmlParser\Exceptions\ChildNotFoundException
-     * @throws \PHPHtmlParser\Exceptions\CircularException
-     * @throws \PHPHtmlParser\Exceptions\CurlException
-     * @throws \PHPHtmlParser\Exceptions\StrictException
-     * @throws \ReflectionException
+     * @throws ChildNotFoundException
+     * @throws CircularException
+     * @throws CurlException
+     * @throws StrictException
+     * @throws ReflectionException
      */
     public function testGetCurrentPage(string $resource, int $page): void
     {
@@ -88,11 +93,11 @@ class DomParserTest extends AbstractParserTest
      *
      * @param int    $count
      *
-     * @throws \PHPHtmlParser\Exceptions\ChildNotFoundException
-     * @throws \PHPHtmlParser\Exceptions\CircularException
-     * @throws \PHPHtmlParser\Exceptions\CurlException
-     * @throws \PHPHtmlParser\Exceptions\StrictException
-     * @throws \ReflectionException
+     * @throws ChildNotFoundException
+     * @throws CircularException
+     * @throws CurlException
+     * @throws StrictException
+     * @throws ReflectionException
      */
     public function testGetListLawyers(string $resource, int $count): void
     {
@@ -198,11 +203,11 @@ class DomParserTest extends AbstractParserTest
      * @param string                                $resource
      * @param \SomeWork\Minjust\Entity\DetailLawyer $exampleLawyer
      *
-     * @throws \PHPHtmlParser\Exceptions\ChildNotFoundException
-     * @throws \PHPHtmlParser\Exceptions\CircularException
-     * @throws \PHPHtmlParser\Exceptions\CurlException
-     * @throws \PHPHtmlParser\Exceptions\StrictException
-     * @throws \ReflectionException
+     * @throws ChildNotFoundException
+     * @throws CircularException
+     * @throws CurlException
+     * @throws StrictException
+     * @throws ReflectionException
      */
     public function testGetFullLawyer(string $resource, DetailLawyer $exampleLawyer): void
     {
