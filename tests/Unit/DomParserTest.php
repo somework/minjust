@@ -2,21 +2,24 @@
 
 namespace SomeWork\Minjust\Tests\Unit;
 
+use Iterator;
+use PHPHtmlParser\Dom;
 use PHPHtmlParser\Exceptions\ChildNotFoundException;
 use PHPHtmlParser\Exceptions\CircularException;
 use PHPHtmlParser\Exceptions\CurlException;
 use PHPHtmlParser\Exceptions\StrictException;
-use ReflectionException;
-use Iterator;
-use PHPHtmlParser\Dom;
 use ReflectionClass;
+use ReflectionException;
 use SomeWork\Minjust\Entity\DetailLawyer;
 use SomeWork\Minjust\Entity\LawFormation;
 use SomeWork\Minjust\Entity\Lawyer;
 use SomeWork\Minjust\Parser\DomParser;
 use SomeWork\Minjust\Parser\ParserInterface;
 
+
 /**
+ * @coversDefaultClass \SomeWork\Minjust\Parser\DomParser
+ *
  * @var DomParser $parser
  */
 class DomParserTest extends AbstractParserTest
@@ -27,6 +30,7 @@ class DomParserTest extends AbstractParserTest
     }
 
     /**
+     * @covers ::getTotalPage
      * @dataProvider getTotalPageProvider
      *
      * @param string $resource
@@ -68,6 +72,7 @@ class DomParserTest extends AbstractParserTest
     }
 
     /**
+     * @covers ::getCurrentPage
      * @dataProvider getPageProvider
      *
      * @param string $resource
@@ -87,6 +92,7 @@ class DomParserTest extends AbstractParserTest
     }
 
     /**
+     * @covers ::getListLawyers
      * @dataProvider getListLawyersProvider
      *
      * @param string $resource
@@ -194,54 +200,6 @@ class DomParserTest extends AbstractParserTest
         yield 'web' => [
             'resource' => 'http://lawyers.minjust.ru/Lawyers',
             'count'    => 20,
-        ];
-    }
-
-    /**
-     * @dataProvider getFullLawyerProvider
-     *
-     * @param string                                $resource
-     * @param \SomeWork\Minjust\Entity\DetailLawyer $exampleLawyer
-     *
-     * @throws ChildNotFoundException
-     * @throws CircularException
-     * @throws CurlException
-     * @throws StrictException
-     * @throws ReflectionException
-     */
-    public function testGetFullLawyer(string $resource, DetailLawyer $exampleLawyer): void
-    {
-        $dom = (new Dom())->load($resource);
-        /**
-         * @var DetailLawyer $lawyer
-         */
-        $lawyer = $this->invokeMethod(static::$parser, 'getFullLawyer', [$dom]);
-
-        $this->assertEquals($exampleLawyer->getChamberOfLaw(), $lawyer->getChamberOfLaw());
-
-        $exampleLawFormation = $exampleLawyer->getLawFormation();
-        $lawFormation = $lawyer->getLawFormation();
-        $this->assertInstanceOf(LawFormation::class, $lawFormation);
-        $this->assertEquals($exampleLawFormation->getOrganizationalForm(), $lawFormation->getOrganizationalForm());
-        $this->assertEquals($exampleLawFormation->getName(), $lawFormation->getName());
-        $this->assertEquals($exampleLawFormation->getEmail(), $lawFormation->getEmail());
-        $this->assertEquals($exampleLawFormation->getPhone(), $lawFormation->getPhone());
-    }
-
-    public function getFullLawyerProvider(): Iterator
-    {
-        yield 'web' => [
-            'resource' => 'http://lawyers.minjust.ru/lawyers/show/1532185',
-            'lawyer'   => (new DetailLawyer())
-                ->setChamberOfLaw('Адвокатская палата Амурской области')
-                ->setLawFormation(
-                    (new LawFormation())
-                        ->setOrganizationalForm('Адвокатские кабинеты')
-                        ->setName('Адвокатский кабинет')
-                        ->setAddress('')
-                        ->setPhone('. 89098119329')
-                        ->setEmail('E-mail: zkabityak@mail.ru')
-                ),
         ];
     }
 }

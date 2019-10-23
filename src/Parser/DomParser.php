@@ -14,6 +14,31 @@ use SomeWork\Minjust\FindResponse;
 
 class DomParser implements ParserInterface
 {
+    /**
+     * @var string
+     */
+    protected const CURRENT_PAGE_SELECTOR = 'span.currentStep';
+
+    /**
+     * @var string
+     */
+    protected const PAGINATION_BLOCK_SELECTOR = 'div.pagination';
+
+    /**
+     * @var string
+     */
+    protected const PAGINATION_STEP_SELECTOR = 'a.step';
+
+    /**
+     * @var string
+     */
+    protected const LAWYERS_LIST_BLOCK_SELECTOR = 'table.persons > tbody > tr';
+
+    /**
+     * @var string
+     */
+    protected const LAWYER_DETAIL_SELECTOR = '.floating > p.row';
+
     public function list(string $body): FindResponse
     {
         $dom = (new Dom())->loadStr($body);
@@ -29,7 +54,7 @@ class DomParser implements ParserInterface
 
     protected function getCurrentPage(Dom $dom): int
     {
-        if ($span = $dom->find('span.currentStep', 0)) {
+        if ($span = $dom->find(static::CURRENT_PAGE_SELECTOR, 0)) {
             return (int) $span->text();
         }
 
@@ -41,7 +66,10 @@ class DomParser implements ParserInterface
         /**
          * @var HtmlNode[] $collection
          */
-        $collection = $dom->find('div.pagination', 0)->find('a.step')->toArray();
+        $collection = $dom
+            ->find(static::PAGINATION_BLOCK_SELECTOR, 0)
+            ->find(static::PAGINATION_STEP_SELECTOR)
+            ->toArray();
         if (0 === count($collection)) {
             return 1;
         }
@@ -64,7 +92,7 @@ class DomParser implements ParserInterface
         /**
          * @var Dom\HtmlNode[]|Collection $nodes
          */
-        $nodes = $dom->find('table.persons > tbody > tr');
+        $nodes = $dom->find(static::LAWYERS_LIST_BLOCK_SELECTOR);
         foreach ($nodes as $node) {
             /**
              * @var Dom\HtmlNode[]|Collection $tds
@@ -89,27 +117,24 @@ class DomParser implements ParserInterface
     {
         $dom = (new Dom())->loadStr($body);
 
-        return $this->getFullLawyer($dom);
-    }
+        /**
+         * @var Dom\HtmlNode[] $nodes
+         */
+        $nodes = $dom->find(static::LAWYER_DETAIL_SELECTOR)->toArray();
 
-    protected function getFullLawyer(Dom $dom): DetailLawyer
-    {
-        $nodes = $dom->find('.floating > p.row')->toArray();
-
-        return (new DetailLawyer())
-            ->setLawFormation($this->getLawFormation($nodes))
+        $lawyer = (new DetailLawyer())
             ->setChamberOfLaw(trim($nodes[5]->text()));
-    }
+        if (($organizationForm = trim($nodes[7]->text())) !== '') {
+            $lawyer->setLawFormation(
+                (new LawFormation())
+                    ->setOrganizationalForm($organizationForm)
+                    ->setName(trim($nodes[9]->text()))
+                    ->setAddress(trim($nodes[11]->text()))
+                    ->setPhone(trim($nodes[13]->text()))
+                    ->setEmail(trim($nodes[15]->text()))
+            );
+        }
 
-    protected function getLawFormation(array $nodes): ?LawFormation
-    {
-        $formation = (new LawFormation())
-            ->setOrganizationalForm(trim($nodes[7]->text()))
-            ->setName(trim($nodes[9]->text()))
-            ->setAddress(trim($nodes[11]->text()))
-            ->setPhone(trim($nodes[13]->text()))
-            ->setEmail(trim($nodes[15]->text()));
-
-        return $formation->getOrganizationalForm() !== '' ? $formation : null;
+        return $lawyer;
     }
 }

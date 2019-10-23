@@ -28,6 +28,7 @@ abstract class AbstractParserTest extends TestCase
     }
 
     /**
+     * @covers ::list
      * @dataProvider listProvider
      *
      * @param string $resource
@@ -47,6 +48,7 @@ abstract class AbstractParserTest extends TestCase
     }
 
     /**
+     * @covers ::detail
      * @dataProvider detailProvider
      *
      * @param string            $resource
