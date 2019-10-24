@@ -43,13 +43,10 @@ class DomParser implements ParserInterface
     {
         $dom = (new Dom())->loadStr($body);
 
-        $findResponse = new FindResponse();
-        $findResponse
+        return (new FindResponse())
             ->setPage($this->getCurrentPage($dom))
             ->setTotalPage($this->getTotalPage($dom))
             ->setLawyers($this->getListLawyers($dom));
-
-        return $findResponse;
     }
 
     protected function getCurrentPage(Dom $dom): int

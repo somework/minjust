@@ -87,8 +87,11 @@ class DomParserTest extends AbstractParserTest
         $dom = (new Dom())->load($resource);
         $parser = $this->getParser();
 
-        $this->assertEquals($page, $this->invokeMethod($parser, 'getCurrentPage', [$dom]),
-            'Wrong for: ' . $resource);
+        $this->assertEquals(
+            $page,
+            $this->invokeMethod($parser, 'getCurrentPage', [$dom]),
+            'Wrong for: ' . $resource
+        );
     }
 
     /**
