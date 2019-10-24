@@ -1,15 +1,16 @@
 <?php
 /** @noinspection PhpUnhandledExceptionInspection */
+
 namespace SomeWork\Minjust\Tests\Unit;
 
-use Psr\Http\Client\ClientExceptionInterface;
-use ReflectionException;
 use Exception;
 use Generator;
 use Iterator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Client\ClientExceptionInterface;
 use ReflectionClass;
+use ReflectionException;
 use SomeWork\Minjust\Client;
 use SomeWork\Minjust\Entity\DetailLawyer;
 use SomeWork\Minjust\Entity\LawFormation;
@@ -19,8 +20,62 @@ use SomeWork\Minjust\FindResponse;
 use SomeWork\Minjust\Parser\ParserInterface;
 use SomeWork\Minjust\Service;
 
+
+/**
+ * @coversDefaultClass \SomeWork\Minjust\Service
+ */
 class ServiceTest extends TestCase
 {
+    /**
+     * @covers ::__construct
+     */
+    public function testConstructor(): void
+    {
+        $client = $this->createMock(Client::class);
+        $parser = $this->createMock(ParserInterface::class);
+
+        $service = new Service($client, $parser);
+
+        $ref = new ReflectionClass(Service::class);
+
+        $privateClient = $ref->getProperty('client');
+        $privateClient->setAccessible(true);
+
+        $privateParser = $ref->getProperty('parser');
+        $privateParser->setAccessible(true);
+
+        $this->assertEquals($client, $privateClient->getValue($service));
+        $this->assertEquals($parser, $privateParser->getValue($service));
+    }
+
+    /**
+     * @covers ::findAll
+     */
+    public function testFindAll(): void
+    {
+        $request = new FindRequest();
+
+        $fn = static function () {
+            yield 1;
+        };
+
+        /**
+         * @var MockObject|Service $service
+         */
+        $service = $this->createPartialMock(Service::class, ['findFromTo']);
+
+        $service
+            ->expects($this->once())
+            ->method('findFromTo')
+            ->with($request, 1, 0)
+            ->willReturn($fn());
+
+        $service->findAll($request);
+    }
+
+    /**
+     * @covers ::find
+     */
     public function testFind(): void
     {
         /**
@@ -90,6 +145,9 @@ class ServiceTest extends TestCase
         yield DetailLawyer::init($lawyer);
     }
 
+    /**
+     * @covers ::findFromTo
+     */
     public function testFindFromToOffsetForOnePage(): void
     {
         $lawyer = $this->generateLawyer();
@@ -127,6 +185,7 @@ class ServiceTest extends TestCase
     }
 
     /**
+     * @covers ::findFromTo
      * @dataProvider multipleProvider
      *
      * @param bool $isMultiple
@@ -204,6 +263,9 @@ class ServiceTest extends TestCase
         yield [true];
     }
 
+    /**
+     * @covers ::getDetailLawyersGenerator
+     */
     public function testGetDetailLawyersGenerator(): void
     {
         $detailFirst = $this->generateDetailLawyer();
@@ -298,6 +360,9 @@ class ServiceTest extends TestCase
         return $method->invokeArgs($object, $parameters);
     }
 
+    /**
+     * @covers ::getDetailLawyersGenerator
+     */
     public function testGetDetailLawyersGeneratorOnEmpty(): void
     {
         $client = $this->createMock(Client::class);

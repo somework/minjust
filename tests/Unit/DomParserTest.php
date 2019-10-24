@@ -10,12 +10,9 @@ use PHPHtmlParser\Exceptions\CurlException;
 use PHPHtmlParser\Exceptions\StrictException;
 use ReflectionClass;
 use ReflectionException;
-use SomeWork\Minjust\Entity\DetailLawyer;
-use SomeWork\Minjust\Entity\LawFormation;
 use SomeWork\Minjust\Entity\Lawyer;
 use SomeWork\Minjust\Parser\DomParser;
 use SomeWork\Minjust\Parser\ParserInterface;
-
 
 /**
  * @coversDefaultClass \SomeWork\Minjust\Parser\DomParser
@@ -24,11 +21,6 @@ use SomeWork\Minjust\Parser\ParserInterface;
  */
 class DomParserTest extends AbstractParserTest
 {
-    public static function getNewParser(): ParserInterface
-    {
-        return new DomParser();
-    }
-
     /**
      * @covers ::getTotalPage
      * @dataProvider getTotalPageProvider
@@ -45,11 +37,17 @@ class DomParserTest extends AbstractParserTest
     public function testGetTotalPage(string $resource, int $pages): void
     {
         $dom = (new Dom())->load($resource);
+        $parser = $this->getParser();
 
         $this->assertEquals(
             $pages,
-            $this->invokeMethod(static::$parser, 'getTotalPage', [$dom])
+            $this->invokeMethod($parser, 'getTotalPage', [$dom])
         );
+    }
+
+    public function getParser(): ParserInterface
+    {
+        return new DomParser();
     }
 
     /**
@@ -87,7 +85,9 @@ class DomParserTest extends AbstractParserTest
     public function testGetCurrentPage(string $resource, int $page): void
     {
         $dom = (new Dom())->load($resource);
-        $this->assertEquals($page, $this->invokeMethod(static::$parser, 'getCurrentPage', [$dom]),
+        $parser = $this->getParser();
+
+        $this->assertEquals($page, $this->invokeMethod($parser, 'getCurrentPage', [$dom]),
             'Wrong for: ' . $resource);
     }
 
@@ -107,8 +107,10 @@ class DomParserTest extends AbstractParserTest
      */
     public function testGetListLawyers(string $resource, int $count): void
     {
+        $parser = $this->getParser();
+
         $dom = (new Dom())->load($resource);
-        $lawyers = $this->invokeMethod(static::$parser, 'getListLawyers', [$dom]);
+        $lawyers = $this->invokeMethod($parser, 'getListLawyers', [$dom]);
         $this->assertIsArray($lawyers);
         $this->assertCount($count, $lawyers);
 

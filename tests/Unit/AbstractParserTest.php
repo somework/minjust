@@ -11,23 +11,6 @@ use SomeWork\Minjust\Parser\ParserInterface;
 abstract class AbstractParserTest extends TestCase
 {
     /**
-     * @var ParserInterface
-     */
-    protected static $parser;
-
-    public static function setUpBeforeClass(): void
-    {
-        static::$parser = static::getNewParser();
-    }
-
-    abstract public static function getNewParser(): ParserInterface;
-
-    public static function tearDownAfterClass(): void
-    {
-        static::$parser = null;
-    }
-
-    /**
      * @covers ::list
      * @dataProvider listProvider
      *
@@ -39,13 +22,15 @@ abstract class AbstractParserTest extends TestCase
     public function testList(string $resource, int $page, int $totalPages, int $count): void
     {
         $body = file_get_contents($resource);
-        $response = static::$parser->list($body);
+        $response = $this->getParser()->list($body);
 
         $this->assertEquals($page, $response->getPage());
         $this->assertEquals($totalPages, $response->getTotalPage());
         $this->assertCount($count, $response->getLawyers());
         $this->assertContainsOnlyInstancesOf(Lawyer::class, $response->getLawyers());
     }
+
+    abstract public function getParser(): ParserInterface;
 
     /**
      * @covers ::detail
@@ -58,7 +43,7 @@ abstract class AbstractParserTest extends TestCase
     public function testDetail(string $resource, string $chamberOfLaw, ?LawFormation $lawFormation): void
     {
         $body = file_get_contents($resource);
-        $lawyer = static::$parser->detail($body);
+        $lawyer = $this->getParser()->detail($body);
 
         $this->assertIsString($lawyer->getChamberOfLaw());
         $this->assertEquals($chamberOfLaw, $lawyer->getChamberOfLaw());
