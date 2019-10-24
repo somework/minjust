@@ -9,8 +9,4 @@ before_script:
   - composer install --prefer-source --no-interaction --dev
 
 script:
-  - phpunit --coverage-text --coverage-clover=coverage.clover
-
-after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+  - php -dxdebug.coverage_enable=1 vendor/bin/phpunit --coverage-clover=coverage.clover --whitelist /home/pinchuk/PhpstormProjects/lawyers/minjust/src --no-configuration /home/pinchuk/PhpstormProjects/lawyers/minjust/tests
