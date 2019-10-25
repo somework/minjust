@@ -29,7 +29,7 @@ class ServiceTest extends TestCase
     /**
      * @covers ::__construct
      */
-    public function testConstructor(): void
+    public function testConstruct(): void
     {
         $client = $this->createMock(Client::class);
         $parser = $this->createMock(ParserInterface::class);
@@ -142,7 +142,7 @@ class ServiceTest extends TestCase
      */
     protected function generateDetailLawyerGenerator(Lawyer $lawyer): Generator
     {
-        yield DetailLawyer::init($lawyer);
+        yield new DetailLawyer($lawyer);
     }
 
     /**
@@ -328,7 +328,7 @@ class ServiceTest extends TestCase
             $id = md5(microtime(true));
         }
 
-        $detailLawyer = (new DetailLawyer())
+        return (new DetailLawyer($lawyer))
             ->setChamberOfLaw('Палата ' . $id)
             ->setLawFormation(
                 (new LawFormation())
@@ -337,8 +337,6 @@ class ServiceTest extends TestCase
                     ->setName('ООО "Бреви Ману" ID: ' . $id)
                     ->setEmail('pinchuk_iv@mnp.ru')
             );
-
-        return $lawyer !== null ? $detailLawyer->loadFromLawyer($lawyer) : $detailLawyer;
     }
 
     /**

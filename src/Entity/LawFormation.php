@@ -2,32 +2,35 @@
 
 namespace SomeWork\Minjust\Entity;
 
+/**
+ * @see \SomeWork\Minjust\Tests\Unit\Entity\LawFormationTest
+ */
 class LawFormation
 {
     /**
      * @var string
      */
-    protected $organizationalForm;
+    protected $organizationalForm = '';
 
     /**
      * @var string
      */
-    protected $name;
+    protected $name = '';
 
     /**
      * @var string
      */
-    protected $address;
+    protected $address = '';
 
     /**
      * @var string
      */
-    protected $phone;
+    protected $phone = '';
 
     /**
      * @var string
      */
-    protected $email;
+    protected $email = '';
 
     /**
      * @return string

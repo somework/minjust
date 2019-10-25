@@ -22,7 +22,7 @@ class ClientTest extends TestCase
 {
     /**
      * @covers ::__construct
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testConstruct(): void
     {

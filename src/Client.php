@@ -7,6 +7,9 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
+/**
+ * @see \SomeWork\Minjust\Tests\Unit\ClientTest
+ */
 class Client
 {
     /**

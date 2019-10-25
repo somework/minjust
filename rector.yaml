@@ -1,0 +1,17 @@
+parameters:
+  autoload_paths:
+    - 'vendor/autoload.php'
+  exclude_paths:
+    - 'tests/data/*'
+
+imports:
+  - { resource: 'vendor/rector/rector/config/set/coding-style/*.yaml' }
+  - { resource: 'vendor/rector/rector/config/set/code-quality/*.yaml' }
+  - { resource: 'vendor/rector/rector/config/set/dead-code/*.yaml' }
+  - { resource: 'vendor/rector/rector/config/set/php/php72.yaml' }
+  - { resource: 'vendor/rector/rector/config/set/phpunit/phpunit80.yaml' }
+  - { resource: 'vendor/rector/rector/config/set/phpunit/phpunit-code-quality.yaml' }
+  - { resource: 'vendor/rector/rector/config/set/phpunit/phpunit-exception.yaml' }
+  - { resource: 'vendor/rector/rector/config/set/phpunit/phpunit-mock.yaml' }
+  - { resource: 'vendor/rector/rector/config/set/phpunit/phpunit-yield-data-provider.yaml' }
+#  - { resource: 'vendor/rector/rector/config/set/phpunit/phpunit-specific-method.yaml' }

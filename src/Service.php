@@ -7,6 +7,9 @@ use Psr\Http\Client\ClientExceptionInterface;
 use SomeWork\Minjust\Entity\Lawyer;
 use SomeWork\Minjust\Parser\ParserInterface;
 
+/**
+ * @see \SomeWork\Minjust\Tests\Unit\ServiceTest
+ */
 class Service
 {
     /**

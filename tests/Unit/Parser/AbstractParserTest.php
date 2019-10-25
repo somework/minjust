@@ -1,6 +1,6 @@
 <?php
 
-namespace SomeWork\Minjust\Tests\Unit;
+namespace SomeWork\Minjust\Tests\Unit\Parser;
 
 use Iterator;
 use PHPUnit\Framework\TestCase;
