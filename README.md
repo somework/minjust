@@ -1,3 +1,7 @@
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/somework/minjust/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/somework/minjust/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/somework/minjust/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/somework/minjust/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/somework/minjust/badges/build.png?b=master)](https://scrutinizer-ci.com/g/somework/minjust/build-status/master)
+
 Example
 
 ```$xslt
