@@ -82,8 +82,10 @@ class FindRequestTest extends TestCase
      * @depends testSet
      *
      * @param \SomeWork\Minjust\FindRequest $request
+     *
+     * @return \SomeWork\Minjust\FindRequest
      */
-    public function testGet(FindRequest $request): void
+    public function testGet(FindRequest $request): FindRequest
     {
         $this->assertEquals(1, $request->getTerritorialSubject());
         $this->assertEquals('testCertificateNumber', $request->getCertificateNumber());
@@ -94,6 +96,30 @@ class FindRequestTest extends TestCase
         $this->assertEquals(55, $request->getMax());
         $this->assertEquals(1, $request->getOffset());
         $this->assertEquals(2, $request->getFormOfLegalPractice());
+
+        return $request;
+    }
+
+    /**
+     * @depends testSet
+     * @covers ::getFormData
+     *
+     * @param \SomeWork\Minjust\FindRequest $findRequest
+     */
+    public function testGetFormData(FindRequest $findRequest): void
+    {
+        $request = [
+            FindRequest::FULL_NAME              => $findRequest->getFullName(),
+            FindRequest::REGISTER_NUMBER        => $findRequest->getRegisterNumber(),
+            FindRequest::CERTIFICATE_NUMBER     => $findRequest->getCertificateNumber(),
+            FindRequest::STATUS                 => $findRequest->getStatus(),
+            FindRequest::FORM_OF_LEGAL_PRACTICE => $findRequest->getFormOfLegalPractice(),
+            FindRequest::TERRITORIAL_SUBJECT    => $findRequest->getTerritorialSubject(),
+            FindRequest::MAX                    => $findRequest->getMax(),
+            FindRequest::OFFSET                 => $findRequest->getOffset(),
+        ];
+
+        $this->assertEquals($request, $findRequest->getFormData());
     }
 
     /**

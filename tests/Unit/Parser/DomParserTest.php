@@ -143,19 +143,19 @@ class DomParserTest extends AbstractParserTest
     public function getPageProvider(): Iterator
     {
         yield 'one-page' => [
-            'resource' => dirname(__DIR__) . '/data/one-page.html',
+            'resource' => dirname(__DIR__, 2) . '/data/one-page.html',
             'page'     => 1,
         ];
         yield 'many-page' => [
-            'resource' => dirname(__DIR__) . '/data/many-page.html',
+            'resource' => dirname(__DIR__, 2) . '/data/many-page.html',
             'page'     => 1,
         ];
         yield 'many-page-not-first' => [
-            'resource' => dirname(__DIR__) . '/data/many-page-not-first.html',
+            'resource' => dirname(__DIR__, 2) . '/data/many-page-not-first.html',
             'page'     => 6,
         ];
         yield 'rewind-not-first' => [
-            'resource' => dirname(__DIR__) . '/data/rewind-not-first.html',
+            'resource' => dirname(__DIR__, 2) . '/data/rewind-not-first.html',
             'page'     => 2,
         ];
         yield 'web' => [
@@ -167,19 +167,19 @@ class DomParserTest extends AbstractParserTest
     public function getTotalPageProvider(): Iterator
     {
         yield 'one-page' => [
-            'resource' => dirname(__DIR__) . '/data/one-page.html',
+            'resource' => dirname(__DIR__, 2) . '/data/one-page.html',
             'pages'    => 1,
         ];
         yield 'many-page' => [
-            'resource' => dirname(__DIR__) . '/data/many-page.html',
+            'resource' => dirname(__DIR__, 2) . '/data/many-page.html',
             'pages'    => 6657,
         ];
         yield 'many-page-not-first' => [
-            'resource' => dirname(__DIR__) . '/data/many-page-not-first.html',
+            'resource' => dirname(__DIR__, 2) . '/data/many-page-not-first.html',
             'pages'    => 58,
         ];
         yield 'rewind-not-first' => [
-            'resource' => dirname(__DIR__) . '/data/rewind-not-first.html',
+            'resource' => dirname(__DIR__, 2) . '/data/rewind-not-first.html',
             'pages'    => 2,
         ];
     }
@@ -187,19 +187,19 @@ class DomParserTest extends AbstractParserTest
     public function getListLawyersProvider(): Iterator
     {
         yield 'one-page' => [
-            'resource' => dirname(__DIR__) . '/data/one-page.html',
+            'resource' => dirname(__DIR__, 2) . '/data/one-page.html',
             'count'    => 12,
         ];
         yield 'many-page' => [
-            'resource' => dirname(__DIR__) . '/data/many-page.html',
+            'resource' => dirname(__DIR__, 2) . '/data/many-page.html',
             'count'    => 20,
         ];
         yield 'many-page-not-first' => [
-            'resource' => dirname(__DIR__) . '/data/many-page-not-first.html',
+            'resource' => dirname(__DIR__, 2) . '/data/many-page-not-first.html',
             'count'    => 20,
         ];
         yield 'rewind-not-first' => [
-            'resource' => dirname(__DIR__) . '/data/rewind-not-first.html',
+            'resource' => dirname(__DIR__, 2) . '/data/rewind-not-first.html',
             'count'    => 8,
         ];
         yield 'web' => [
