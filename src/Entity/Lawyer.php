@@ -2,37 +2,40 @@
 
 namespace SomeWork\Minjust\Entity;
 
+/**
+ * @see \SomeWork\Minjust\Tests\Unit\Entity\LawyerTest
+ */
 class Lawyer
 {
     /**
      * @var string
      */
-    protected $fullName;
+    protected $fullName = '';
 
     /**
      * @var string
      */
-    protected $registerNumber;
+    protected $registerNumber = '';
 
     /**
      * @var string
      */
-    protected $certificateNumber;
+    protected $certificateNumber = '';
 
     /**
      * @var string
      */
-    protected $status;
+    protected $status = '';
 
     /**
      * @var string
      */
-    protected $territorialSubject;
+    protected $territorialSubject = '';
 
     /**
      * @var string
      */
-    protected $url;
+    protected $url = '';
 
     /**
      * @return string

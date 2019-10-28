@@ -4,6 +4,9 @@ namespace SomeWork\Minjust;
 
 use InvalidArgumentException;
 
+/**
+ * @see \SomeWork\Minjust\Tests\Unit\FindRequestTest
+ */
 class FindRequest
 {
     /**
@@ -49,7 +52,7 @@ class FindRequest
     /**
      * @var int
      */
-    private const MAX_VALUE_MAX = 100;
+    public const MAX_VALUE_MAX = 100;
 
     /**
      * @var string
@@ -81,12 +84,15 @@ class FindRequest
      */
     protected $territorialSubject;
 
+    /**
+     * @var bool
+     */
     protected $fullData = false;
 
     /**
      * @var int
      */
-    protected $max = 50;
+    protected $max = FindRequest::MAX_VALUE_MAX;
 
     /**
      * @var int
@@ -242,6 +248,11 @@ class FindRequest
      */
     public function setMax(int $max): FindRequest
     {
+        if ($max < 1) {
+            throw new InvalidArgumentException(
+                sprintf('Minimum value for "%s" is %s', static::MAX, 1)
+            );
+        }
         if ($max > static::MAX_VALUE_MAX) {
             throw new InvalidArgumentException(
                 sprintf('Maximum value for "%s" is %s', static::MAX, static::MAX_VALUE_MAX)
@@ -267,6 +278,11 @@ class FindRequest
      */
     public function setOffset(int $offset): FindRequest
     {
+        if ($offset < 0) {
+            throw new InvalidArgumentException(
+                sprintf('Minimum value for "%s" is %s', static::OFFSET, 0)
+            );
+        }
         $this->offset = $offset;
 
         return $this;

@@ -6,6 +6,9 @@ use Generator;
 use SomeWork\Minjust\Entity\DetailLawyer;
 use SomeWork\Minjust\Entity\Lawyer;
 
+/**
+ * @see \SomeWork\Minjust\Tests\Unit\FindResponseTest
+ */
 class FindResponse
 {
     /**

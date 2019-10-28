@@ -2,22 +2,26 @@
 
 namespace SomeWork\Minjust\Entity;
 
+/**
+ * @see \SomeWork\Minjust\Tests\Unit\Entity\DetailLawyerTest
+ */
 class DetailLawyer extends Lawyer
 {
     /**
      * @var string
      */
-    protected $chamberOfLaw;
+    protected $chamberOfLaw = '';
 
     /**
      * @var LawFormation|null
      */
     protected $lawFormation;
 
-    public static function init(Lawyer $lawyer): DetailLawyer
+    public function __construct(?Lawyer $lawyer = null)
     {
-        return (new self())
-            ->loadFromLawyer($lawyer);
+        if ($lawyer !== null) {
+            $this->loadFromLawyer($lawyer);
+        }
     }
 
     public function loadFromLawyer(Lawyer $lawyer): self

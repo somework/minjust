@@ -12,6 +12,9 @@ use SomeWork\Minjust\Entity\LawFormation;
 use SomeWork\Minjust\Entity\Lawyer;
 use SomeWork\Minjust\FindResponse;
 
+/**
+ * @see \SomeWork\Minjust\Tests\Unit\DomParserTest
+ */
 class DomParser implements ParserInterface
 {
     /**

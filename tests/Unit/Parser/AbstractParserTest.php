@@ -1,6 +1,6 @@
 <?php
 
-namespace SomeWork\Minjust\Tests\Unit;
+namespace SomeWork\Minjust\Tests\Unit\Parser;
 
 use Iterator;
 use PHPUnit\Framework\TestCase;
@@ -71,25 +71,25 @@ abstract class AbstractParserTest extends TestCase
     public function listProvider(): Iterator
     {
         yield [
-            dirname(__DIR__) . '/data/one-page.html',
+            dirname(__DIR__, 2) . '/data/one-page.html',
             'page'       => 1,
             'totalPages' => 1,
             'count'      => 12,
         ];
         yield [
-            dirname(__DIR__) . '/data/rewind-not-first.html',
+            dirname(__DIR__, 2) . '/data/rewind-not-first.html',
             'page'       => 2,
             'totalPages' => 2,
             'count'      => 8,
         ];
         yield [
-            dirname(__DIR__) . '/data/many-page-not-first.html',
+            dirname(__DIR__, 2) . '/data/many-page-not-first.html',
             'page'       => 6,
             'totalPages' => 58,
             'count'      => 20,
         ];
         yield [
-            dirname(__DIR__) . '/data/many-page.html',
+            dirname(__DIR__, 2) . '/data/many-page.html',
             'page'       => 1,
             'totalPages' => 6657,
             'count'      => 20,
