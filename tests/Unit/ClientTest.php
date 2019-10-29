@@ -12,6 +12,7 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use ReflectionClass;
+use ReflectionException;
 use SomeWork\Minjust\Client;
 use SomeWork\Minjust\FindRequest;
 
