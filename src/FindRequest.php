@@ -80,7 +80,7 @@ class FindRequest
     protected $formOfLegalPractice;
 
     /**
-     * @var int|null
+     * @var string|null
      */
     protected $territorialSubject;
 
@@ -214,19 +214,19 @@ class FindRequest
     }
 
     /**
-     * @return int|null
+     * @return string|null
      */
-    public function getTerritorialSubject(): ?int
+    public function getTerritorialSubject(): ?string
     {
         return $this->territorialSubject;
     }
 
     /**
-     * @param int|null $territorialSubject
+     * @param string|null $territorialSubject
      *
      * @return FindRequest
      */
-    public function setTerritorialSubject(?int $territorialSubject): FindRequest
+    public function setTerritorialSubject(?string $territorialSubject): FindRequest
     {
         $this->territorialSubject = $territorialSubject;
 

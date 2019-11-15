@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SomeWork\Minjust\Tests\Unit;
 
 use DivineOmega\Psr18GuzzleAdapter\Client as GuzzleClient;

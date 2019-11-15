@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SomeWork\Minjust\Tests\Unit;
 
 use InvalidArgumentException;
@@ -55,7 +57,7 @@ class FindRequestTest extends TestCase
     public function testSet(FindRequest $request): FindRequest
     {
         $request
-            ->setTerritorialSubject(1)
+            ->setTerritorialSubject('01')
             ->setCertificateNumber('testCertificateNumber')
             ->setRegisterNumber('testRegisterNumber')
             ->setStatus(1)
@@ -87,15 +89,32 @@ class FindRequestTest extends TestCase
      */
     public function testGet(FindRequest $request): FindRequest
     {
-        $this->assertEquals(1, $request->getTerritorialSubject());
+        $this->assertEquals('01', $request->getTerritorialSubject());
+        $this->assertIsString($request->getTerritorialSubject());
+
         $this->assertEquals('testCertificateNumber', $request->getCertificateNumber());
+        $this->assertIsString($request->getCertificateNumber());
+
         $this->assertEquals('testRegisterNumber', $request->getRegisterNumber());
+        $this->assertIsString($request->getRegisterNumber());
+
         $this->assertEquals(1, $request->getStatus());
+        $this->assertIsInt($request->getStatus());
+
         $this->assertEquals('testFullName', $request->getFullName());
+        $this->assertIsString($request->getFullName());
+
         $this->assertEquals(true, $request->isFullData());
+        $this->assertIsBool($request->isFullData());
+
         $this->assertEquals(55, $request->getMax());
+        $this->assertIsInt($request->getMax());
+
         $this->assertEquals(1, $request->getOffset());
+        $this->assertIsInt($request->getOffset());
+
         $this->assertEquals(2, $request->getFormOfLegalPractice());
+        $this->assertIsInt($request->getFormOfLegalPractice());
 
         return $request;
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SomeWork\Minjust\Parser;
 
 use SomeWork\Minjust\Entity\DetailLawyer;

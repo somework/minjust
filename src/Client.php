@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SomeWork\Minjust;
 
 use Psr\Http\Client\ClientExceptionInterface;
@@ -63,7 +65,7 @@ class Client
             $request = $this
                 ->requestFactory
                 ->createRequest('POST', static::LIST_URL)
-                ->withBody($this->streamFactory->createStream(http_build_query($formData, null, '&')))
+                ->withBody($this->streamFactory->createStream(http_build_query($formData, '', '&')))
                 ->withHeader('Content-Type', 'application/x-www-form-urlencoded');
         }
 

@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SomeWork\Minjust\Tests\Unit\Entity;
 
-use ReflectionObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionObject;
 use SomeWork\Minjust\Entity\Lawyer;
 
 /**
