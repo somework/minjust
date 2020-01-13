@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
 /** @noinspection PhpUnhandledExceptionInspection */
+declare(strict_types=1);
 
 namespace SomeWork\Minjust\Tests\Unit;
 
@@ -11,7 +10,6 @@ use Generator;
 use Iterator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Client\ClientExceptionInterface;
 use ReflectionClass;
 use ReflectionException;
 use SomeWork\Minjust\Client;
@@ -171,7 +169,6 @@ class ServiceTest extends TestCase
             ->willReturn($response);
 
         $request = new FindRequest();
-        $request->setOffset(1000);
 
         $response = $service->findFromTo($request, 1, 2);
         $this->assertInstanceOf(Generator::class, $response);
@@ -179,7 +176,6 @@ class ServiceTest extends TestCase
         foreach ($response as $lawyer) {
             $this->assertNotInstanceOf(DetailLawyer::class, $lawyer);
         }
-        $this->assertEquals(0, $request->getOffset());
 
         $request->setFullData(true);
         $response = $service->findFromTo($request, 1, 1);
@@ -192,8 +188,6 @@ class ServiceTest extends TestCase
      * @dataProvider multipleProvider
      *
      * @param bool $isMultiple
-     *
-     * @throws ClientExceptionInterface
      */
     public function testFindFromToOffsetForMultiplePage(bool $isMultiple): void
     {
@@ -231,8 +225,7 @@ class ServiceTest extends TestCase
             ->method('find')
             ->willReturn($responseSecond);
 
-        $request = (new FindRequest())
-            ->setMax(1);
+        $request = new FindRequest();
 
         if (!$isMultiple) {
             $response = $service->findFromTo($request, 1, 2);
@@ -242,7 +235,6 @@ class ServiceTest extends TestCase
             $this->assertEquals($lawyerFirst, $lawyer);
 
             $response->next();
-            $this->assertEquals(1, $request->getOffset());
 
             $lawyer = $response->current();
             $this->assertInstanceOf(Lawyer::class, $lawyer);

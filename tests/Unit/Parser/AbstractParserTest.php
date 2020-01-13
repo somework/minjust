@@ -8,6 +8,7 @@ use Iterator;
 use PHPUnit\Framework\TestCase;
 use SomeWork\Minjust\Entity\LawFormation;
 use SomeWork\Minjust\Entity\Lawyer;
+use SomeWork\Minjust\FindRequest;
 use SomeWork\Minjust\Parser\ParserInterface;
 
 abstract class AbstractParserTest extends TestCase
@@ -76,7 +77,7 @@ abstract class AbstractParserTest extends TestCase
             dirname(__DIR__, 2) . '/data/one-page.html',
             'page'       => 1,
             'totalPages' => 1,
-            'count'      => 12,
+            'count'      => 1,
         ];
         yield [
             dirname(__DIR__, 2) . '/data/rewind-not-first.html',
@@ -86,18 +87,18 @@ abstract class AbstractParserTest extends TestCase
         ];
         yield [
             dirname(__DIR__, 2) . '/data/many-page-not-first.html',
-            'page'       => 6,
-            'totalPages' => 58,
+            'page'       => 2,
+            'totalPages' => 6706,
             'count'      => 20,
         ];
         yield [
             dirname(__DIR__, 2) . '/data/many-page.html',
             'page'       => 1,
-            'totalPages' => 6657,
+            'totalPages' => 6706,
             'count'      => 20,
         ];
         yield 'web' => [
-            'http://lawyers.minjust.ru/Lawyers?regnumber=77/2340',
+            'http://lawyers.minjust.ru/Lawyers?' . FindRequest::REGISTER_NUMBER . '=77/2340',
             'page'       => 1,
             'totalPages' => 1,
             'count'      => 1,

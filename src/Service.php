@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SomeWork\Minjust;
 
 use Generator;
-use Psr\Http\Client\ClientExceptionInterface;
 use SomeWork\Minjust\Entity\Lawyer;
 use SomeWork\Minjust\Parser\ParserInterface;
 
@@ -34,7 +33,6 @@ class Service
      * @param FindRequest $findRequest
      *
      * @return Generator
-     * @throws ClientExceptionInterface
      */
     public function findAll(FindRequest $findRequest): Generator
     {
@@ -47,12 +45,11 @@ class Service
      * @param int         $endPage
      *
      * @return Generator
-     * @throws ClientExceptionInterface
      * @todo Упростить логику метода
      */
     public function findFromTo(FindRequest $findRequest, int $startPage = 1, int $endPage = 1): Generator
     {
-        $findRequest->setOffset(($startPage - 1) * $findRequest->getMax());
+        $findRequest->setPage($startPage);
         $findResponse = $this->find($findRequest);
 
         yield from $findRequest->isFullData() ? $findResponse->getDetailLawyers() : $findResponse->getLawyers();
@@ -64,7 +61,7 @@ class Service
 
         for ($i = $findResponse->getPage(); $i < $endPage; $i++) {
             $endPage = $endPage < $findResponse->getTotalPage() ? $endPage : $findResponse->getTotalPage();
-            $findRequest->setOffset($i * $findRequest->getMax());
+            $findRequest->setPage($i);
             yield from $findRequest->isFullData() ?
                 $this->find($findRequest)->getDetailLawyers() :
                 $this->find($findRequest)->getLawyers();
@@ -75,7 +72,6 @@ class Service
      * @param FindRequest $findRequest
      *
      * @return FindResponse
-     * @throws ClientExceptionInterface
      */
     public function find(FindRequest $findRequest): FindResponse
     {
@@ -94,7 +90,6 @@ class Service
      * @param Lawyer[] $lawyers
      *
      * @return Generator
-     * @throws ClientExceptionInterface
      */
     protected function getDetailLawyersGenerator(array $lawyers): Generator
     {

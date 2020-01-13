@@ -12,6 +12,8 @@ use PHPHtmlParser\Exceptions\NotLoadedException;
 use SomeWork\Minjust\Entity\DetailLawyer;
 use SomeWork\Minjust\Entity\LawFormation;
 use SomeWork\Minjust\Entity\Lawyer;
+use SomeWork\Minjust\Exception\BlockNotFoundException;
+use SomeWork\Minjust\Exception\RuntimeException;
 use SomeWork\Minjust\FindResponse;
 
 /**
@@ -22,17 +24,17 @@ class DomParser implements ParserInterface
     /**
      * @var string
      */
-    protected const CURRENT_PAGE_SELECTOR = 'span.currentStep';
+    protected const PAGINATION_BLOCK_SELECTOR = 'ul.pagination';
 
     /**
      * @var string
      */
-    protected const PAGINATION_BLOCK_SELECTOR = 'div.pagination';
+    protected const CURRENT_PAGE_SELECTOR = 'li.active';
 
     /**
      * @var string
      */
-    protected const PAGINATION_STEP_SELECTOR = 'a.step';
+    protected const PAGINATION_STEP_SELECTOR = 'li';
 
     /**
      * @var string
@@ -43,6 +45,11 @@ class DomParser implements ParserInterface
      * @var string
      */
     protected const LAWYER_DETAIL_SELECTOR = '.floating > p.row';
+
+    /**
+     * @var string
+     */
+    protected const LAWYER_DETAIL_NAME_FIELD = 'label';
 
     public function list(string $body): FindResponse
     {
@@ -56,29 +63,88 @@ class DomParser implements ParserInterface
 
     protected function getCurrentPage(Dom $dom): int
     {
-        if ($span = $dom->find(static::CURRENT_PAGE_SELECTOR, 0)) {
-            return (int) $span->text();
+        try {
+            /**
+             * @var HtmlNode|null $block
+             */
+            $block = $this
+                ->getPagination($dom)
+                ->find(static::CURRENT_PAGE_SELECTOR, 0);
+        } catch (ChildNotFoundException $exception) {
+            throw new RuntimeException($exception->getMessage(), $exception->getCode(), $exception);
         }
 
-        return 1;
+        if (null === $block) {
+            throw new BlockNotFoundException(static::CURRENT_PAGE_SELECTOR);
+        }
+
+        try {
+            return (int) $block->firstChild()->text();
+        } catch (ChildNotFoundException $exception) {
+            throw new RuntimeException($exception->getMessage(), $exception->getCode(), $exception);
+        }
     }
 
     protected function getTotalPage(Dom $dom): int
     {
-        /**
-         * @var HtmlNode[] $collection
-         */
-        $collection = $dom
-            ->find(static::PAGINATION_BLOCK_SELECTOR, 0)
-            ->find(static::PAGINATION_STEP_SELECTOR)
-            ->toArray();
+        try {
+            /* @noinspection NullPointerExceptionInspection */
+            $collection = $this
+                ->getPagination($dom)
+                ->find(static::PAGINATION_STEP_SELECTOR)
+                ->toArray();
+        } catch (ChildNotFoundException $exception) {
+            throw new RuntimeException($exception->getMessage(), $exception->getCode(), $exception);
+        }
+
         if (0 === count($collection)) {
             return 1;
         }
-        $lastStep = (int) end($collection)->text();
-        $currentPage = $this->getCurrentPage($dom);
 
-        return $lastStep > $currentPage ? $lastStep : $currentPage;
+        /**
+         * @var HtmlNode $last
+         */
+        $last = end($collection);
+
+        try {
+            /**
+             * @var HtmlNode|null $link
+             */
+            $link = $last->find('a', 0);
+        } catch (ChildNotFoundException $exception) {
+            throw new RuntimeException($exception->getMessage(), $exception->getCode(), $exception);
+        }
+
+        if ($link) {
+            $href = (string) $link->getAttribute('href');
+            $matches = [];
+            preg_match('/page=([\d]+)/', $href, $matches);
+
+            return (int) $matches[1];
+        }
+
+        return $this->getCurrentPage($dom);
+    }
+
+    protected function getPagination(Dom $dom): HtmlNode
+    {
+        static $parsedDom = null;
+        static $pagination = null;
+        if ($dom !== $parsedDom) {
+            $parsedDom = $dom;
+
+            try {
+                $pagination = $dom->find(static::PAGINATION_BLOCK_SELECTOR, 0);
+            } catch (\Exception $exception) {
+                throw new RuntimeException($exception->getMessage(), $exception->getCode(), $exception);
+            }
+
+            if (null === $pagination) {
+                throw new BlockNotFoundException(static::PAGINATION_BLOCK_SELECTOR);
+            }
+        }
+
+        return $pagination;
     }
 
     /**
@@ -100,16 +166,13 @@ class DomParser implements ParserInterface
              * @var Dom\HtmlNode[]|Collection $tds
              */
             $tds = $node->find('td');
-            $tds = array_filter($tds->toArray(), static function (HtmlNode $node) {
-                return $node->outerHtml() !== '' && $node->getAttribute('class') !== 'empty';
-            });
             $data[] = (new Lawyer())
-                ->setRegisterNumber($tds[3]->text())
-                ->setFullName($tds[4]->text(true))
-                ->setUrl($tds[4]->firstChild()->getAttribute('href'))
-                ->setTerritorialSubject($tds[5]->text())
-                ->setCertificateNumber($tds[6]->text())
-                ->setStatus($tds[7]->text());
+                ->setRegisterNumber($tds[0]->text())
+                ->setFullName($tds[1]->text(true))
+                ->setUrl($tds[1]->firstChild()->getAttribute('href'))
+                ->setTerritorialSubject($tds[2]->text())
+                ->setCertificateNumber($tds[3]->text())
+                ->setStatus($tds[4]->text());
         }
 
         return $data;
@@ -124,16 +187,23 @@ class DomParser implements ParserInterface
          */
         $nodes = $dom->find(static::LAWYER_DETAIL_SELECTOR)->toArray();
 
+        $nodes = array_filter($nodes, static function (HtmlNode $htmlNode) {
+            return strpos($htmlNode->getAttribute('class'), static::LAWYER_DETAIL_NAME_FIELD) === false;
+        });
+
+        $nodes = array_values($nodes);
+
         $lawyer = (new DetailLawyer())
-            ->setChamberOfLaw(trim($nodes[5]->text()));
-        if (($organizationForm = trim($nodes[7]->text())) !== '') {
+            ->setChamberOfLaw(trim($nodes[2]->text()));
+
+        if (($organizationForm = trim($nodes[3]->text())) !== '') {
             $lawyer->setLawFormation(
                 (new LawFormation())
                     ->setOrganizationalForm($organizationForm)
-                    ->setName(trim($nodes[9]->text()))
-                    ->setAddress(trim($nodes[11]->text()))
-                    ->setPhone(trim($nodes[13]->text()))
-                    ->setEmail(trim($nodes[15]->text()))
+                    ->setName(trim($nodes[4]->text()))
+                    ->setAddress(trim($nodes[5]->text()))
+                    ->setPhone(trim($nodes[6]->text()))
+                    ->setEmail(trim($nodes[7]->text()))
             );
         }
 

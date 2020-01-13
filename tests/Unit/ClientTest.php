@@ -7,7 +7,6 @@ namespace SomeWork\Minjust\Tests\Unit;
 use DivineOmega\Psr18GuzzleAdapter\Client as GuzzleClient;
 use DivineOmega\Psr18GuzzleAdapter\Exceptions\ClientException;
 use Http\Factory\Guzzle\RequestFactory;
-use Http\Factory\Guzzle\StreamFactory;
 use Iterator;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatcher;
 use PHPUnit\Framework\TestCase;
@@ -15,7 +14,6 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamFactoryInterface;
 use ReflectionClass;
 use ReflectionException;
 use SomeWork\Minjust\Client;
@@ -36,22 +34,18 @@ class ClientTest extends TestCase
     {
         $httpClient = $this->createMock(ClientInterface::class);
         $requestFactory = $this->createMock(RequestFactoryInterface::class);
-        $streamFactory = $this->createMock(StreamFactoryInterface::class);
 
-        $client = new Client($httpClient, $requestFactory, $streamFactory);
+        $client = new Client($httpClient, $requestFactory);
 
         $ref = new ReflectionClass(Client::class);
         $clientProperty = $ref->getProperty('client');
         $requestFactoryProperty = $ref->getProperty('requestFactory');
-        $streamFactoryProperty = $ref->getProperty('streamFactory');
 
         $clientProperty->setAccessible(true);
         $requestFactoryProperty->setAccessible(true);
-        $streamFactoryProperty->setAccessible(true);
 
         $this->assertEquals($httpClient, $clientProperty->getValue($client));
         $this->assertEquals($requestFactory, $requestFactoryProperty->getValue($client));
-        $this->assertEquals($streamFactory, $streamFactoryProperty->getValue($client));
     }
 
     /**
@@ -65,8 +59,7 @@ class ClientTest extends TestCase
     {
         $client = new Client(
             new GuzzleClient(),
-            new RequestFactory(),
-            new StreamFactory()
+            new RequestFactory()
         );
 
         $body = $client->list($formData);
@@ -87,7 +80,7 @@ class ClientTest extends TestCase
         ];
         yield 'Белоусова Надежда Сергеевна' => [
             'formData' => [
-                FindRequest::OFFSET    => 20,
+                FindRequest::PAGE      => 1,
                 FindRequest::FULL_NAME => 'б',
                 FindRequest::STATUS    => 4,
             ],
@@ -106,8 +99,7 @@ class ClientTest extends TestCase
     {
         $client = new Client(
             new GuzzleClient(),
-            new RequestFactory(),
-            new StreamFactory()
+            new RequestFactory()
         );
 
         $body = $client->detail($url);
@@ -137,7 +129,6 @@ class ClientTest extends TestCase
 
         $httpClient = $this->createMock(ClientInterface::class);
         $requestFactory = $this->createMock(RequestFactoryInterface::class);
-        $streamFactory = $this->createMock(StreamFactoryInterface::class);
 
         $httpClient
             ->expects($this->once())
@@ -149,7 +140,7 @@ class ClientTest extends TestCase
         $this->expectExceptionCode(123);
         $this->expectExceptionMessage('Test Message');
 
-        $client = new Client($httpClient, $requestFactory, $streamFactory);
+        $client = new Client($httpClient, $requestFactory);
         /* @noinspection PhpUnhandledExceptionInspection */
         $this->invokeMethod($client, 'handleRequest', [$request]);
     }
@@ -180,7 +171,6 @@ class ClientTest extends TestCase
     {
         $httpClient = $this->createMock(ClientInterface::class);
         $requestFactory = $this->createMock(RequestFactoryInterface::class);
-        $streamFactory = $this->createMock(StreamFactoryInterface::class);
 
         $request = $this->createMock(RequestInterface::class);
         $response = $this->createMock(ResponseInterface::class);
@@ -196,7 +186,7 @@ class ClientTest extends TestCase
 
         $this->expectException(WrongStatusCodeException::class);
 
-        $client = new Client($httpClient, $requestFactory, $streamFactory);
+        $client = new Client($httpClient, $requestFactory);
         /* @noinspection PhpUnhandledExceptionInspection */
         $this->invokeMethod($client, 'handleRequest', [$request]);
     }

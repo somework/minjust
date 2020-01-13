@@ -8,7 +8,6 @@ use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\StreamFactoryInterface;
 use SomeWork\Minjust\Exception\HttpClientException;
 use SomeWork\Minjust\Exception\WrongStatusCodeException;
 
@@ -37,19 +36,12 @@ class Client
      */
     private $requestFactory;
 
-    /**
-     * @var StreamFactoryInterface
-     */
-    private $streamFactory;
-
     public function __construct(
         ClientInterface $client,
-        RequestFactoryInterface $requestFactory,
-        StreamFactoryInterface $streamFactory
+        RequestFactoryInterface $requestFactory
     ) {
         $this->client = $client;
         $this->requestFactory = $requestFactory;
-        $this->streamFactory = $streamFactory;
     }
 
     /**
@@ -61,17 +53,14 @@ class Client
      */
     public function list(array $formData = []): string
     {
-        if ([] === $formData) {
-            $request = $this
-                ->requestFactory
-                ->createRequest('GET', static::LIST_URL);
-        } else {
-            $request = $this
-                ->requestFactory
-                ->createRequest('POST', static::LIST_URL)
-                ->withBody($this->streamFactory->createStream(http_build_query($formData, '', '&')))
-                ->withHeader('Content-Type', 'application/x-www-form-urlencoded');
+        $query = '';
+        if ([] !== $formData) {
+            $query .= '?' . http_build_query($formData);
         }
+
+        $request = $this
+                ->requestFactory
+                ->createRequest('GET', static::LIST_URL . $query);
 
         return $this->handleRequest($request);
     }
