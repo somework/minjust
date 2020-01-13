@@ -12,32 +12,32 @@ class FindRequest
     /**
      * @var string
      */
-    public const FULL_NAME = 'lawyername';
+    public const FULL_NAME = 'fullName';
 
     /**
      * @var string
      */
-    public const REGISTER_NUMBER = 'regnumber';
+    public const REGISTER_NUMBER = 'registerNumber';
 
     /**
      * @var string
      */
-    public const CERTIFICATE_NUMBER = 'lawicard';
+    public const CERTIFICATE_NUMBER = 'identityCard';
 
     /**
      * @var string
      */
-    public const STATUS = 'lawstatus';
+    public const STATUS = 'status';
 
     /**
      * @var string
      */
-    public const FORM_OF_LEGAL_PRACTICE = 'formation';
+    public const FORM_OF_LEGAL_PRACTICE = 'orgForm';
 
     /**
      * @var string
      */
-    public const TERRITORIAL_SUBJECT = 'lawregion';
+    public const TERRITORIAL_SUBJECT = 'regCode';
 
     /**
      * @var string

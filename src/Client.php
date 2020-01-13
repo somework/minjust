@@ -7,7 +7,10 @@ namespace SomeWork\Minjust;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use SomeWork\Minjust\Exception\HttpClientException;
+use SomeWork\Minjust\Exception\WrongStatusCodeException;
 
 /**
  * @see \SomeWork\Minjust\Tests\Unit\ClientTest
@@ -53,7 +56,8 @@ class Client
      * @param array $formData
      *
      * @return string
-     * @throws ClientExceptionInterface
+     * @throws WrongStatusCodeException
+     * @throws HttpClientException
      */
     public function list(array $formData = []): string
     {
@@ -69,18 +73,15 @@ class Client
                 ->withHeader('Content-Type', 'application/x-www-form-urlencoded');
         }
 
-        return $this
-            ->client
-            ->sendRequest($request)
-            ->getBody()
-            ->getContents();
+        return $this->handleRequest($request);
     }
 
     /**
      * @param string $url
      *
      * @return string
-     * @throws ClientExceptionInterface
+     * @throws WrongStatusCodeException
+     * @throws HttpClientException
      */
     public function detail(string $url): string
     {
@@ -88,10 +89,27 @@ class Client
             ->requestFactory
             ->createRequest('GET', static::SERVICE_URL . $url);
 
-        return $this
-            ->client
-            ->sendRequest($request)
-            ->getBody()
-            ->getContents();
+        return $this->handleRequest($request);
+    }
+
+    /**
+     * @param RequestInterface $request
+     *
+     * @return string
+     * @throws WrongStatusCodeException
+     * @throws HttpClientException
+     */
+    public function handleRequest(RequestInterface $request):string
+    {
+        try {
+            $response = $this->client->sendRequest($request);
+        } catch (ClientExceptionInterface $e) {
+            throw new HttpClientException($e->getMessage(), $e->getCode(), $e);
+        }
+        if ($response->getStatusCode() === 200) {
+            return $response->getBody()->getContents();
+        }
+
+        throw new WrongStatusCodeException($response->getStatusCode());
     }
 }
