@@ -96,7 +96,7 @@ class Service
         foreach ($lawyers as $lawyer) {
             yield $this
                 ->parser
-                ->detail($this->client->detail($lawyer->getUrl()))
+                ->lawyer($this->client->detail($lawyer->getUrl()))
                 ->loadFromLawyer($lawyer);
         }
     }

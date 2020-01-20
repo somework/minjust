@@ -142,6 +142,13 @@ class DomParserTest extends AbstractParserTest
         }
     }
 
+    public function testLocations()
+    {
+        $str = file_get_contents(dirname(__DIR__, 2) . '/data/one-page.html');
+
+        $parser = $this->getParser();
+    }
+
     public function getPageProvider(): Iterator
     {
         yield 'one-page' => [

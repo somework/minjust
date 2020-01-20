@@ -46,7 +46,7 @@ abstract class AbstractParserTest extends TestCase
     public function testDetail(string $resource, string $chamberOfLaw, ?LawFormation $lawFormation): void
     {
         $body = file_get_contents($resource);
-        $lawyer = $this->getParser()->detail($body);
+        $lawyer = $this->getParser()->lawyer($body);
 
         $this->assertIsString($lawyer->getChamberOfLaw());
         $this->assertEquals($chamberOfLaw, $lawyer->getChamberOfLaw());

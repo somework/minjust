@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace SomeWork\Minjust\Parser;
 
+use Exception;
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\Dom\Collection;
 use PHPHtmlParser\Dom\HtmlNode;
 use PHPHtmlParser\Exceptions\ChildNotFoundException;
-use PHPHtmlParser\Exceptions\NotLoadedException;
 use SomeWork\Minjust\Entity\DetailLawyer;
 use SomeWork\Minjust\Entity\LawFormation;
 use SomeWork\Minjust\Entity\Lawyer;
+use SomeWork\Minjust\Entity\Location;
+use SomeWork\Minjust\Entity\Pagination;
+use SomeWork\Minjust\Entity\Status;
 use SomeWork\Minjust\Exception\BlockNotFoundException;
 use SomeWork\Minjust\Exception\RuntimeException;
-use SomeWork\Minjust\FindResponse;
 
 /**
  * @see \SomeWork\Minjust\Tests\Unit\DomParserTest
@@ -51,14 +53,108 @@ class DomParser implements ParserInterface
      */
     protected const LAWYER_DETAIL_NAME_FIELD = 'label';
 
-    public function list(string $body): FindResponse
-    {
-        $dom = (new Dom())->loadStr($body);
+    /**
+     * @var string
+     */
+    protected const LOCATIONS_SELECTOR = 'ul.form > li > select#regCode > option';
 
-        return (new FindResponse())
-            ->setPage($this->getCurrentPage($dom))
-            ->setTotalPage($this->getTotalPage($dom))
-            ->setLawyers($this->getListLawyers($dom));
+    /**
+     * @var string
+     */
+    protected const STATUSES_SELECTOR = 'ul.form > li > select#status > option';
+
+    /**
+     * @var string
+     */
+    protected const FORM_OF_LEGAL_PRACTICE_SELECTOR = 'ul.form > li > select#orgForm > option';
+
+    public function lawyers(string $body): array
+    {
+        $dom = $this->getDom($body);
+
+        $data = [];
+        /**
+         * @var Dom\HtmlNode[]|Collection $nodes
+         */
+        $nodes = $dom->find(static::LAWYERS_LIST_BLOCK_SELECTOR);
+        foreach ($nodes as $node) {
+            /**
+             * @var Dom\HtmlNode[]|Collection $tds
+             */
+            $tds = $node->find('td');
+            $data[] = (new Lawyer())
+                ->setRegisterNumber($tds[0]->text())
+                ->setFullName($tds[1]->text(true))
+                ->setUrl($tds[1]->firstChild()->getAttribute('href'))
+                ->setTerritorialSubject($tds[2]->text())
+                ->setCertificateNumber($tds[3]->text())
+                ->setStatus($tds[4]->text());
+        }
+
+        return $data;
+    }
+
+    protected function getDom(string $body): Dom
+    {
+        static $dom = null;
+        static $parsedBody = null;
+
+        if (null === $parsedBody || $parsedBody !== $body) {
+            $parsedBody = $body;
+
+            try {
+                $dom = (new Dom())->loadStr($body);
+            } catch (Exception $exception) {
+                throw new RuntimeException($exception->getMessage(), $exception->getCode(), $exception);
+            }
+        }
+
+        return $dom;
+    }
+
+    public function detailLawyer(string $body): DetailLawyer
+    {
+        $dom = $this->getDom($body);
+
+        /**
+         * @var Dom\HtmlNode[] $nodes
+         */
+        $nodes = $dom->find(static::LAWYER_DETAIL_SELECTOR)->toArray();
+
+        $nodes = array_filter(
+            $nodes,
+            static function (HtmlNode $htmlNode) {
+                return strpos($htmlNode->getAttribute('class'), static::LAWYER_DETAIL_NAME_FIELD) === false;
+            }
+        );
+
+        $nodes = array_values($nodes);
+
+        $lawyer = (new DetailLawyer())
+            ->setChamberOfLaw(trim($nodes[2]->text()));
+
+        if (($organizationForm = trim($nodes[3]->text())) !== '') {
+            $lawyer->setLawFormation(
+                (new LawFormation())
+                    ->setOrganizationalForm($organizationForm)
+                    ->setName(trim($nodes[4]->text()))
+                    ->setAddress(trim($nodes[5]->text()))
+                    ->setPhone(trim($nodes[6]->text()))
+                    ->setEmail(trim($nodes[7]->text()))
+            );
+        }
+
+        return $lawyer;
+    }
+
+    public function pagination(string $body): Pagination
+    {
+        $dom = $this->getDom($body);
+
+        return new Pagination(
+            $this->getCurrentPage($dom),
+            $this->getTotalPage($dom)
+        );
     }
 
     protected function getCurrentPage(Dom $dom): int
@@ -83,6 +179,27 @@ class DomParser implements ParserInterface
         } catch (ChildNotFoundException $exception) {
             throw new RuntimeException($exception->getMessage(), $exception->getCode(), $exception);
         }
+    }
+
+    protected function getPagination(Dom $dom): HtmlNode
+    {
+        static $parsedDom = null;
+        static $pagination = null;
+        if ($dom !== $parsedDom) {
+            $parsedDom = $dom;
+
+            try {
+                $pagination = $dom->find(static::PAGINATION_BLOCK_SELECTOR, 0);
+            } catch (Exception $exception) {
+                throw new RuntimeException($exception->getMessage(), $exception->getCode(), $exception);
+            }
+
+            if (null === $pagination) {
+                throw new BlockNotFoundException(static::PAGINATION_BLOCK_SELECTOR);
+            }
+        }
+
+        return $pagination;
     }
 
     protected function getTotalPage(Dom $dom): int
@@ -126,87 +243,88 @@ class DomParser implements ParserInterface
         return $this->getCurrentPage($dom);
     }
 
-    protected function getPagination(Dom $dom): HtmlNode
+    /**
+     * @param string $body
+     *
+     * @return Location[]
+     */
+    public function locations(string $body): array
     {
-        static $parsedDom = null;
-        static $pagination = null;
-        if ($dom !== $parsedDom) {
-            $parsedDom = $dom;
+        $htmlNodes = $this
+            ->getDom($body)
+            ->find(static::LOCATIONS_SELECTOR)
+            ->toArray();
 
-            try {
-                $pagination = $dom->find(static::PAGINATION_BLOCK_SELECTOR, 0);
-            } catch (\Exception $exception) {
-                throw new RuntimeException($exception->getMessage(), $exception->getCode(), $exception);
+        $htmlNodes = array_filter(
+            $htmlNodes,
+            static function (HtmlNode $htmlNode) {
+                return $htmlNode->hasAttribute('value') && $htmlNode->getAttribute('value');
             }
+        );
 
-            if (null === $pagination) {
-                throw new BlockNotFoundException(static::PAGINATION_BLOCK_SELECTOR);
-            }
-        }
+        return array_map(
+            static function (HtmlNode $htmlNode) {
+                $id = $htmlNode->getAttribute('value');
+                $name = trim(str_replace("[{$id}]", '', $htmlNode->text()));
 
-        return $pagination;
+                return new Location($id, $name);
+            },
+            $htmlNodes
+        );
     }
 
     /**
-     * @param \PHPHtmlParser\Dom $dom
+     * @param string $body
      *
-     * @return Lawyer[]
-     * @throws ChildNotFoundException
-     * @throws NotLoadedException
+     * @return Status[]
      */
-    protected function getListLawyers(Dom $dom): array
+    public function statuses(string $body): array
     {
-        $data = [];
-        /**
-         * @var Dom\HtmlNode[]|Collection $nodes
-         */
-        $nodes = $dom->find(static::LAWYERS_LIST_BLOCK_SELECTOR);
-        foreach ($nodes as $node) {
-            /**
-             * @var Dom\HtmlNode[]|Collection $tds
-             */
-            $tds = $node->find('td');
-            $data[] = (new Lawyer())
-                ->setRegisterNumber($tds[0]->text())
-                ->setFullName($tds[1]->text(true))
-                ->setUrl($tds[1]->firstChild()->getAttribute('href'))
-                ->setTerritorialSubject($tds[2]->text())
-                ->setCertificateNumber($tds[3]->text())
-                ->setStatus($tds[4]->text());
-        }
+        $htmlNodes = $this
+            ->getDom($body)
+            ->find(static::STATUSES_SELECTOR)
+            ->toArray();
 
-        return $data;
+        $htmlNodes = array_filter(
+            $htmlNodes,
+            static function (HtmlNode $htmlNode) {
+                return $htmlNode->hasAttribute('value') && $htmlNode->getAttribute('value');
+            }
+        );
+
+        return array_map(
+            static function (HtmlNode $htmlNode) {
+                $id = $htmlNode->getAttribute('value');
+                $name = trim($htmlNode->text());
+
+                return new Status($id, $name);
+            },
+            $htmlNodes
+        );
     }
 
-    public function detail(string $body): DetailLawyer
+    public function formOfLegalPractice(string $body): array
     {
-        $dom = (new Dom())->loadStr($body);
+        $htmlNodes = $this
+            ->getDom($body)
+            ->find(static::FORM_OF_LEGAL_PRACTICE_SELECTOR)
+            ->toArray();
 
-        /**
-         * @var Dom\HtmlNode[] $nodes
-         */
-        $nodes = $dom->find(static::LAWYER_DETAIL_SELECTOR)->toArray();
+        $htmlNodes = array_filter(
+            $htmlNodes,
+            static function (HtmlNode $htmlNode) {
+                return $htmlNode->hasAttribute('value') && $htmlNode->getAttribute('value');
+            }
+        );
 
-        $nodes = array_filter($nodes, static function (HtmlNode $htmlNode) {
-            return strpos($htmlNode->getAttribute('class'), static::LAWYER_DETAIL_NAME_FIELD) === false;
-        });
+        return array_map(
+            static function (HtmlNode $htmlNode) {
+                $id = $htmlNode->getAttribute('value');
+                $name = trim($htmlNode->text());
 
-        $nodes = array_values($nodes);
-
-        $lawyer = (new DetailLawyer())
-            ->setChamberOfLaw(trim($nodes[2]->text()));
-
-        if (($organizationForm = trim($nodes[3]->text())) !== '') {
-            $lawyer->setLawFormation(
-                (new LawFormation())
-                    ->setOrganizationalForm($organizationForm)
-                    ->setName(trim($nodes[4]->text()))
-                    ->setAddress(trim($nodes[5]->text()))
-                    ->setPhone(trim($nodes[6]->text()))
-                    ->setEmail(trim($nodes[7]->text()))
-            );
-        }
-
-        return $lawyer;
+                return new Status($id, $name);
+            },
+            $htmlNodes
+        );
     }
 }
