@@ -2,8 +2,6 @@
 
 namespace SomeWork\Minjust;
 
-use InvalidArgumentException;
-
 /**
  * @see \SomeWork\Minjust\Tests\Unit\FindRequestTest
  */
@@ -12,47 +10,37 @@ class FindRequest
     /**
      * @var string
      */
-    public const FULL_NAME = 'lawyername';
+    public const FULL_NAME = 'fullName';
 
     /**
      * @var string
      */
-    public const REGISTER_NUMBER = 'regnumber';
+    public const REGISTER_NUMBER = 'registerNumber';
 
     /**
      * @var string
      */
-    public const CERTIFICATE_NUMBER = 'lawicard';
+    public const CERTIFICATE_NUMBER = 'identityCard';
 
     /**
      * @var string
      */
-    public const STATUS = 'lawstatus';
+    public const STATUS = 'status';
 
     /**
      * @var string
      */
-    public const FORM_OF_LEGAL_PRACTICE = 'formation';
+    public const FORM_OF_LEGAL_PRACTICE = 'orgForm';
 
     /**
      * @var string
      */
-    public const TERRITORIAL_SUBJECT = 'lawregion';
+    public const TERRITORIAL_SUBJECT = 'regCode';
 
     /**
      * @var string
      */
-    public const MAX = 'max';
-
-    /**
-     * @var string
-     */
-    public const OFFSET = 'offset';
-
-    /**
-     * @var int
-     */
-    public const MAX_VALUE_MAX = 100;
+    public const PAGE = 'page';
 
     /**
      * @var string
@@ -92,12 +80,7 @@ class FindRequest
     /**
      * @var int
      */
-    protected $max = FindRequest::MAX_VALUE_MAX;
-
-    /**
-     * @var int
-     */
-    protected $offset = 0;
+    protected $page = 1;
 
     public function getFormData(): array
     {
@@ -108,8 +91,7 @@ class FindRequest
             self::STATUS                 => $this->getStatus(),
             self::FORM_OF_LEGAL_PRACTICE => $this->getFormOfLegalPractice(),
             self::TERRITORIAL_SUBJECT    => $this->getTerritorialSubject(),
-            self::MAX                    => $this->getMax(),
-            self::OFFSET                 => $this->getOffset(),
+            self::PAGE                   => $this->getPage() - 1,
         ];
     }
 
@@ -236,54 +218,19 @@ class FindRequest
     /**
      * @return int
      */
-    public function getMax(): int
+    public function getPage(): int
     {
-        return $this->max;
+        return $this->page;
     }
 
     /**
-     * @param int $max
+     * @param int $page
      *
      * @return FindRequest
      */
-    public function setMax(int $max): FindRequest
+    public function setPage(int $page): FindRequest
     {
-        if ($max < 1) {
-            throw new InvalidArgumentException(
-                sprintf('Minimum value for "%s" is %s', static::MAX, 1)
-            );
-        }
-        if ($max > static::MAX_VALUE_MAX) {
-            throw new InvalidArgumentException(
-                sprintf('Maximum value for "%s" is %s', static::MAX, static::MAX_VALUE_MAX)
-            );
-        }
-        $this->max = $max;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOffset(): int
-    {
-        return $this->offset;
-    }
-
-    /**
-     * @param int $offset
-     *
-     * @return FindRequest
-     */
-    public function setOffset(int $offset): FindRequest
-    {
-        if ($offset < 0) {
-            throw new InvalidArgumentException(
-                sprintf('Minimum value for "%s" is %s', static::OFFSET, 0)
-            );
-        }
-        $this->offset = $offset;
+        $this->page = $page;
 
         return $this;
     }

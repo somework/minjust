@@ -154,7 +154,7 @@ class DomParserTest extends AbstractParserTest
         ];
         yield 'many-page-not-first' => [
             'resource' => dirname(__DIR__, 2) . '/data/many-page-not-first.html',
-            'page'     => 6,
+            'page'     => 2,
         ];
         yield 'rewind-not-first' => [
             'resource' => dirname(__DIR__, 2) . '/data/rewind-not-first.html',
@@ -174,11 +174,11 @@ class DomParserTest extends AbstractParserTest
         ];
         yield 'many-page' => [
             'resource' => dirname(__DIR__, 2) . '/data/many-page.html',
-            'pages'    => 6657,
+            'pages'    => 6706,
         ];
         yield 'many-page-not-first' => [
             'resource' => dirname(__DIR__, 2) . '/data/many-page-not-first.html',
-            'pages'    => 58,
+            'pages'    => 6706,
         ];
         yield 'rewind-not-first' => [
             'resource' => dirname(__DIR__, 2) . '/data/rewind-not-first.html',
@@ -190,7 +190,7 @@ class DomParserTest extends AbstractParserTest
     {
         yield 'one-page' => [
             'resource' => dirname(__DIR__, 2) . '/data/one-page.html',
-            'count'    => 12,
+            'count'    => 1,
         ];
         yield 'many-page' => [
             'resource' => dirname(__DIR__, 2) . '/data/many-page.html',

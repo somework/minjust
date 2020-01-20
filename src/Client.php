@@ -7,7 +7,9 @@ namespace SomeWork\Minjust;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\RequestInterface;
+use SomeWork\Minjust\Exception\HttpClientException;
+use SomeWork\Minjust\Exception\WrongStatusCodeException;
 
 /**
  * @see \SomeWork\Minjust\Tests\Unit\ClientTest
@@ -34,53 +36,41 @@ class Client
      */
     private $requestFactory;
 
-    /**
-     * @var StreamFactoryInterface
-     */
-    private $streamFactory;
-
     public function __construct(
         ClientInterface $client,
-        RequestFactoryInterface $requestFactory,
-        StreamFactoryInterface $streamFactory
+        RequestFactoryInterface $requestFactory
     ) {
         $this->client = $client;
         $this->requestFactory = $requestFactory;
-        $this->streamFactory = $streamFactory;
     }
 
     /**
      * @param array $formData
      *
      * @return string
-     * @throws ClientExceptionInterface
+     * @throws WrongStatusCodeException
+     * @throws HttpClientException
      */
     public function list(array $formData = []): string
     {
-        if ([] === $formData) {
-            $request = $this
-                ->requestFactory
-                ->createRequest('GET', static::LIST_URL);
-        } else {
-            $request = $this
-                ->requestFactory
-                ->createRequest('POST', static::LIST_URL)
-                ->withBody($this->streamFactory->createStream(http_build_query($formData, '', '&')))
-                ->withHeader('Content-Type', 'application/x-www-form-urlencoded');
+        $query = '';
+        if ([] !== $formData) {
+            $query .= '?' . http_build_query($formData);
         }
 
-        return $this
-            ->client
-            ->sendRequest($request)
-            ->getBody()
-            ->getContents();
+        $request = $this
+                ->requestFactory
+                ->createRequest('GET', static::LIST_URL . $query);
+
+        return $this->handleRequest($request);
     }
 
     /**
      * @param string $url
      *
      * @return string
-     * @throws ClientExceptionInterface
+     * @throws WrongStatusCodeException
+     * @throws HttpClientException
      */
     public function detail(string $url): string
     {
@@ -88,10 +78,27 @@ class Client
             ->requestFactory
             ->createRequest('GET', static::SERVICE_URL . $url);
 
-        return $this
-            ->client
-            ->sendRequest($request)
-            ->getBody()
-            ->getContents();
+        return $this->handleRequest($request);
+    }
+
+    /**
+     * @param RequestInterface $request
+     *
+     * @return string
+     * @throws WrongStatusCodeException
+     * @throws HttpClientException
+     */
+    public function handleRequest(RequestInterface $request):string
+    {
+        try {
+            $response = $this->client->sendRequest($request);
+        } catch (ClientExceptionInterface $e) {
+            throw new HttpClientException($e->getMessage(), $e->getCode(), $e);
+        }
+        if ($response->getStatusCode() === 200) {
+            return $response->getBody()->getContents();
+        }
+
+        throw new WrongStatusCodeException($response->getStatusCode());
     }
 }

@@ -1,35 +1,28 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<!-- saved from url=(0118)http://lawyers.minjust.ru/Lawyers?lawyername=&regnumber=&lawicard=&lawstatus=4&formation=4&lawregion=&max=20&offset=20 -->
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- http://lawyers.minjust.ru/lawyers?fullName=&registerNumber=&identityCard=&status=4&orgForm=4&regCode=&page=1 -->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-
     <title>Об адвокатской деятельности в Российской Федерации</title>
-    <meta content="" name="keywords">
-    <meta content="" name="description">
-    <link href="http://lawyers.minjust.ru/css/images/icons/favicon.ico?_debugResources=y&amp;n=1571059949093"
-          rel="shortcut icon"
-          type="image/x-icon">
-    <link href="./rewind-not-first_files/reset.css" media="screen, projection" rel="stylesheet" type="text/css">
-    <link href="./rewind-not-first_files/style.css" media="screen, projection" rel="stylesheet" type="text/css">
-    <link href="./rewind-not-first_files/temporary.css" media="screen, projection" rel="stylesheet" type="text/css">
-    <link href="./rewind-not-first_files/forms.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <link rel="shortcut icon" href="/resources/css/images/icons/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/resources/css/reset.css" type="text/css" media="screen, projection" >
+    <link rel="stylesheet" href="/resources/css/style.css" type="text/css" media="screen, projection" >
+    <link rel="stylesheet" href="/resources/css/temporary.css" type="text/css" media="screen, projection" >
+    <link rel="stylesheet" href="/resources/css/forms.css" type="text/css" media="screen, projection" >
 
-
-    <meta content="main" name="layout">
-
-
-    <script src="./rewind-not-first_files/jquery.min.js" type="text/javascript"></script>
-    <script src="./rewind-not-first_files/jquery-ui.min.js" type="text/javascript"></script>
-    <script src="./rewind-not-first_files/jquery.ui.datepicker-ru.js" type="text/javascript"></script>
-    <script src="./rewind-not-first_files/jquery.form.js" type="text/javascript"></script>
-    <script src="./rewind-not-first_files/Application.js" type="text/javascript"></script>
-    <script src="./rewind-not-first_files/Window.js" type="text/javascript"></script>
-    <script src="./rewind-not-first_files/Request.js" type="text/javascript"></script>
-    <script src="./rewind-not-first_files/Hint.js" type="text/javascript"></script>
-    <script src="./rewind-not-first_files/PopUp.js" type="text/javascript"></script>
-    <script src="./rewind-not-first_files/Override.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/resources/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/resources/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/resources/js/jquery.ui.datepicker-ru.js"></script>
+    <script type="text/javascript" src="/resources/js/jquery.form.js"></script>
+    <script type="text/javascript" src="/resources/js/Application.js"></script>
+    <script type="text/javascript" src="/resources/js/Window.js"></script>
+    <script type="text/javascript" src="/resources/js/Request.js"></script>
+    <script type="text/javascript" src="/resources/js/Hint.js"></script>
+    <script type="text/javascript" src="/resources/js/PopUp.js"></script>
+    <script type="text/javascript" src="/resources/js/Override.js"></script>
+    <meta charset="UTF-8">
 </head>
 
 
@@ -38,15 +31,13 @@
 <div id="wrapper">
     <div id="header">
         <div class="sys">
-            <a class="fr green-left-arrow" href="http://www.minjust.ru/" target="_blank">Министерство Юстиции Российской
-                Федерации</a>
-            <a class="pict home fl" href="http://lawyers.minjust.ru/" title="Главная страница">
+            <a href="http://www.minjust.ru/" target="_blank" class="fr green-left-arrow">Министерство Юстиции Российской Федерации</a>
+            <a class="pict home fl" title="Главная страница" href="/">
             </a>
-            <a class="pict map fl" href="http://lawyers.minjust.ru/sitemap" title="Карта сайта">
+            <a class="pict map fl" title="Карта сайта" href="/sitemap">
             </a>
-            <a class="pict contacts fl" href="mailto:%20info@scli.ru" title="Обратная связь">
+            <a class="pict contacts fl" title="Обратная связь" href="mailto: info@scli.ru">
             </a>
-
             <div class="cb"></div>
         </div>
         <div class="main">
@@ -61,347 +52,148 @@
         </div>
     </div><!-- #header-->
 
-
-    <div id="content">
+    <div class="container" id="content">
         <div class="offsetter">
-            <form action="http://lawyers.minjust.ru/Lawyers" id="form1" method="post" name="form1">
+            <form name="form1" method="get" action="lawyers">
                 <div id="person-filter">
                     <h3 class="form-title">Найти адвоката</h3>
                     <ul class="form">
                         <li>
-                            <label for="name">ФИО адвоката: </label>
-                            <input maxlength="253" name="lawyername"
-                                   style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAvElEQVQ4T2NkoBAwIukXALL9gViBgJkPgPIbgfgDSB2yAQVAfj+RDioEqpuAbkADUKAeiB0JGLIfKN8IxCD1KC6AGYDsqgtANf+B2BDJUBCfaAM2QDUGkGMAcpjA/Qx1EVEugHkJZDlcA7EGgKJSHi0wHwL5D4g1wAGoEISRwQEgB4SJCkSQZns0Aw6SYgDICyCMDEDOJ8oL6E5HMwfsDayxQHFSBmUmUIJBdzq6C0DeWAATRE626AqJ4gMAKh82EQu8MAEAAAAASUVORK5CYII=&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;"
-                                   title="Фамилия, имя, отчество адвоката. Поиск по вхождению" type="text"
-                                   value=""><br>
+                            <label for="fullName">ФИО адвоката: </label>
+                            <input type="text" name="fullName" title="Фамилия, имя, отчество адвоката. Поиск по вхождению"
+                                   maxlength="253" id="fullName" value=""/><br/>
                         </li>
                         <li>
-                            <label for="name">Реестровый номер:</label>
-                            <input maxlength="9" name="regnumber" title="Реестровый номер адвоката. Поиск по вхождению"
-                                   type="text" value=""><br>
+                            <label for="registerNumber">Реестровый номер:</label>
+                            <input type="text" name="registerNumber"
+                                   title="Реестровый номер адвоката. Поиск по вхождению"
+                                   maxlength="9" id="registerNumber" value=""/><br/>
                         </li>
                         <li>
-                            <label for="name">Номер удостоверения:</label>
-                            <input maxlength="25" name="lawicard"
-                                   title="Номер удостоверения адвоката. Поиск по вхождению"
-                                   type="text" value=""><br>
+                            <label for="identityCard">Номер удостоверения:</label>
+                            <input type="text" name="identityCard" title="Номер удостоверения адвоката. Поиск по вхождению"
+                                   maxlength="25" id="identityCard" value=""/><br/>
                         </li>
                         <li>
-                            <label for="name">Статус:</label>
-                            <select name="lawstatus" style="width: 318px; height: 21px; line-height: 21px"
-                                    title="Текущий статус адвоката">
+                            <label for="status">Статус:</label>
+                            <select name="status" title="Текущий статус адвоката"
+                                    style="width: 318px; height: 21px; line-height: 21px" id="status">
                                 <option value="">Все</option>
-
-
                                 <option value="1">Действующий</option>
-
-
                                 <option value="2">Прекращен</option>
-
-
                                 <option value="3">Статус приостановлен</option>
-
-
-                                <option selected="selected" value="4">Исключен</option>
-
-
-                            </select><br>
+                                <option value="4" selected="selected">Исключен</option>
+                            </select><br/>
                         </li>
                         <li>
-                            <label for="name">Форма адвокатского образования:</label>
-                            <select name="formation" style="width: 318px; height: 21px; line-height: 21px"
-                                    title="Форма адвокатского образования">
+                            <label for="orgForm">Форма адвокатского образования:</label>
+                            <select name="orgForm" title="Форма адвокатского образования"
+                                    style="width: 318px; height: 21px; line-height: 21px" id="orgForm">
                                 <option value="">Все</option>
-
-
                                 <option value="1">Адвокатские кабинеты</option>
-
-
                                 <option value="2">Коллегии адвокатов</option>
-
-
                                 <option value="3">Адвокатские бюро</option>
-
-
-                                <option selected="selected" value="4">Юридические консультации</option>
-
-
-                            </select><br>
+                                <option value="4" selected="selected">Юридические консультации</option>
+                            </select><br/>
                         </li>
                         <li>
-                            <label for="name">Субъект РФ:</label>
-                            <select name="lawregion" style="width: 318px; height: 21px; line-height: 21px"
-                                    title="Субъект РФ">
-                                <option value="">Все</option>
-
-
-                                <option value="22">Алтайский край [22]</option>
-
-
-                                <option value="28">Амурская область [28]</option>
-
-
-                                <option value="29">Архангельская область [29]</option>
-
-
-                                <option value="30">Астраханская область [30]</option>
-
-
-                                <option value="31">Белгородская область [31]</option>
-
-
-                                <option value="32">Брянская область [32]</option>
-
-
-                                <option value="33">Владимирская область [33]</option>
-
-
-                                <option value="34">Волгоградская область [34]</option>
-
-
-                                <option value="35">Вологодская область [35]</option>
-
-
-                                <option value="36">Воронежская область [36]</option>
-
-
-                                <option value="77">г. Москва [77]</option>
-
-
-                                <option value="78">г. Санкт-Петербург [78]</option>
-
-
-                                <option value="79">Еврейская автономная область [79]</option>
-
-
-                                <option value="75">Забайкальский край [75]</option>
-
-
-                                <option value="37">Ивановская область [37]</option>
-
-
-                                <option value="38">Иркутская область [38]</option>
-
-
-                                <option value="07">Кабардино-Балкарская Республика [07]</option>
-
-
-                                <option value="39">Калининградская область [39]</option>
-
-
-                                <option value="40">Калужская область [40]</option>
-
-
-                                <option value="41">Камчатский край [41]</option>
-
-
-                                <option value="09">Карачаево-Черкесская Республика [09]</option>
-
-
-                                <option value="42">Кемеровская область [42]</option>
-
-
-                                <option value="43">Кировская область [43]</option>
-
-
-                                <option value="44">Костромская область [44]</option>
-
-
-                                <option value="23">Краснодарский край [23]</option>
-
-
-                                <option value="24">Красноярский край [24]</option>
-
-
-                                <option value="45">Курганская область [45]</option>
-
-
-                                <option value="46">Курская область [46]</option>
-
-
-                                <option value="47">Ленинградская область [47]</option>
-
-
-                                <option value="48">Липецкая область [48]</option>
-
-
-                                <option value="49">Магаданская область [49]</option>
-
-
-                                <option value="50">Московская область [50]</option>
-
-
-                                <option value="51">Мурманская область [51]</option>
-
-
-                                <option value="83">Ненецкий автономный округ [83]</option>
-
-
-                                <option value="52">Нижегородская область [52]</option>
-
-
-                                <option value="53">Новгородская область [53]</option>
-
-
-                                <option value="54">Новосибирская область [54]</option>
-
-
-                                <option value="55">Омская область [55]</option>
-
-
-                                <option value="56">Оренбургская область [56]</option>
-
-
-                                <option value="57">Орловская область [57]</option>
-
-
-                                <option value="58">Пензенская область [58]</option>
-
-
-                                <option value="59">Пермский край [59]</option>
-
-
-                                <option value="25">Приморский край [25]</option>
-
-
-                                <option value="60">Псковская область [60]</option>
-
-
+                            <label for="regCaption">Субъект РФ:</label>
+                            <select name="regCode" title="Субъект РФ"
+                                    style="width: 318px; height: 21px; line-height: 21px" id="regCode">
+                                <option value="" selected="selected">Все</option>
                                 <option value="01">Республика Адыгея [01]</option>
-
-
                                 <option value="02">Республика Алтай [02]</option>
-
-
                                 <option value="03">Республика Башкортостан [03]</option>
-
-
                                 <option value="04">Республика Бурятия [04]</option>
-
-
                                 <option value="05">Республика Дагестан [05]</option>
-
-
                                 <option value="06">Республика Ингушетия [06]</option>
-
-
+                                <option value="07">Кабардино-Балкарская Республика [07]</option>
                                 <option value="08">Республика Калмыкия [08]</option>
-
-
+                                <option value="09">Карачаево-Черкесская Республика [09]</option>
                                 <option value="10">Республика Карелия [10]</option>
-
-
                                 <option value="11">Республика Коми [11]</option>
-
-
-                                <option value="90">Республика Крым [90]</option>
-
-
                                 <option value="12">Республика Марий Эл [12]</option>
-
-
                                 <option value="13">Республика Мордовия [13]</option>
-
-
                                 <option value="14">Республика Саха (Якутия) [14]</option>
-
-
                                 <option value="15">Республика Северная Осетия — Алания [15]</option>
-
-
                                 <option value="16">Республика Татарстан [16]</option>
-
-
                                 <option value="17">Республика Тыва [17]</option>
-
-
-                                <option value="19">Республика Хакасия [19]</option>
-
-
-                                <option value="61">Ростовская область [61]</option>
-
-
-                                <option value="62">Рязанская область [62]</option>
-
-
-                                <option value="63">Самарская область [63]</option>
-
-
-                                <option value="64">Саратовская область [64]</option>
-
-
-                                <option value="65">Сахалинская область [65]</option>
-
-
-                                <option value="66">Свердловская область [66]</option>
-
-
-                                <option value="91">Севастополь [91]</option>
-
-
-                                <option value="67">Смоленская область [67]</option>
-
-
-                                <option value="26">Ставропольский край [26]</option>
-
-
-                                <option value="68">Тамбовская область [68]</option>
-
-
-                                <option value="69">Тверская область [69]</option>
-
-
-                                <option value="70">Томская область [70]</option>
-
-
-                                <option value="71">Тульская область [71]</option>
-
-
-                                <option value="72">Тюменская область [72]</option>
-
-
                                 <option value="18">Удмуртская Республика [18]</option>
-
-
-                                <option value="73">Ульяновская область [73]</option>
-
-
-                                <option value="27">Хабаровский край [27]</option>
-
-
-                                <option value="86">Ханты-Мансийский автономный округ - Югра [86]</option>
-
-
-                                <option value="74">Челябинская область [74]</option>
-
-
+                                <option value="19">Республика Хакасия [19]</option>
                                 <option value="20">Чеченская Республика [20]</option>
-
-
                                 <option value="21">Чувашская Республика [21]</option>
-
-
-                                <option value="87">Чукотский автономный округ [87]</option>
-
-
-                                <option value="89">Ямало-Ненецкий автономный округ [89]</option>
-
-
+                                <option value="22">Алтайский край [22]</option>
+                                <option value="23">Краснодарский край [23]</option>
+                                <option value="24">Красноярский край [24]</option>
+                                <option value="25">Приморский край [25]</option>
+                                <option value="26">Ставропольский край [26]</option>
+                                <option value="27">Хабаровский край [27]</option>
+                                <option value="28">Амурская область [28]</option>
+                                <option value="29">Архангельская область [29]</option>
+                                <option value="30">Астраханская область [30]</option>
+                                <option value="31">Белгородская область [31]</option>
+                                <option value="32">Брянская область [32]</option>
+                                <option value="33">Владимирская область [33]</option>
+                                <option value="34">Волгоградская область [34]</option>
+                                <option value="35">Вологодская область [35]</option>
+                                <option value="36">Воронежская область [36]</option>
+                                <option value="37">Ивановская область [37]</option>
+                                <option value="38">Иркутская область [38]</option>
+                                <option value="39">Калининградская область [39]</option>
+                                <option value="40">Калужская область [40]</option>
+                                <option value="41">Камчатский край [41]</option>
+                                <option value="42">Кемеровская область [42]</option>
+                                <option value="43">Кировская область [43]</option>
+                                <option value="44">Костромская область [44]</option>
+                                <option value="45">Курганская область [45]</option>
+                                <option value="46">Курская область [46]</option>
+                                <option value="47">Ленинградская область [47]</option>
+                                <option value="48">Липецкая область [48]</option>
+                                <option value="49">Магаданская область [49]</option>
+                                <option value="50">Московская область [50]</option>
+                                <option value="51">Мурманская область [51]</option>
+                                <option value="52">Нижегородская область [52]</option>
+                                <option value="53">Новгородская область [53]</option>
+                                <option value="54">Новосибирская область [54]</option>
+                                <option value="55">Омская область [55]</option>
+                                <option value="56">Оренбургская область [56]</option>
+                                <option value="57">Орловская область [57]</option>
+                                <option value="58">Пензенская область [58]</option>
+                                <option value="59">Пермский край [59]</option>
+                                <option value="60">Псковская область [60]</option>
+                                <option value="61">Ростовская область [61]</option>
+                                <option value="62">Рязанская область [62]</option>
+                                <option value="63">Самарская область [63]</option>
+                                <option value="64">Саратовская область [64]</option>
+                                <option value="65">Сахалинская область [65]</option>
+                                <option value="66">Свердловская область [66]</option>
+                                <option value="67">Смоленская область [67]</option>
+                                <option value="68">Тамбовская область [68]</option>
+                                <option value="69">Тверская область [69]</option>
+                                <option value="70">Томская область [70]</option>
+                                <option value="71">Тульская область [71]</option>
+                                <option value="72">Тюменская область [72]</option>
+                                <option value="73">Ульяновская область [73]</option>
+                                <option value="74">Челябинская область [74]</option>
+                                <option value="75">Забайкальский край [75]</option>
                                 <option value="76">Ярославская область [76]</option>
-
-
-                            </select><br>
+                                <option value="77">г. Москва [77]</option>
+                                <option value="78">г. Санкт-Петербург [78]</option>
+                                <option value="79">Еврейская автономная область [79]</option>
+                                <option value="83">Ненецкий автономный округ [83]</option>
+                                <option value="86">Ханты-Мансийский автономный округ - Югра [86]</option>
+                                <option value="87">Чукотский автономный округ [87]</option>
+                                <option value="89">Ямало-Ненецкий автономный округ [89]</option>
+                                <option value="90">Республика Крым [90]</option>
+                                <option value="91">Севастополь [91]</option>
+                            </select><br/>
                         </li>
-                        <br>
-
-
+                        <br/>
                         <li>
-                            <a class="button-find btn"
-                               href="http://lawyers.minjust.ru/Lawyers?lawyername=&amp;regnumber=&amp;lawicard=&amp;lawstatus=4&amp;formation=4&amp;lawregion=&amp;max=20&amp;offset=20#"
-                               onclick="document.form1.submit();">
+                            <a class="button-find btn" onclick="document.form1.submit();" href="#">
                                 <span>Найти</span>
                             </a>
-                            <a class="button-find btn" href="http://lawyers.minjust.ru/Lawyers" style="float: right">
+                            <a class="button-find btn" href="/Lawyers" style="float: right">
                                 <span>Очистить</span>
                             </a>
                         </li>
@@ -409,272 +201,153 @@
                 </div>
             </form>
         </div>
-
         <div>
-        <span class="fr summ">
-            <div class="pagination">
-                <a class="prevLink"
-                   href="http://lawyers.minjust.ru/Lawyers?lawyername=&amp;regnumber=&amp;lawicard=&amp;lawstatus=4&amp;formation=4&amp;lawregion=&amp;max=20&amp;offset=0">&lt;</a>
-                <a
-                        class="step"
-                        href="http://lawyers.minjust.ru/Lawyers?lawyername=&amp;regnumber=&amp;lawicard=&amp;lawstatus=4&amp;formation=4&amp;lawregion=&amp;max=20&amp;offset=0">1</a>
-                <span class="currentStep">2</span>
-                <label for="name">Всего: 28</label>
+            <div class="fr summ">
+                <ul class="pagination"><li><a href="/lawyers?fullName=&registerNumber=&identityCard=&status=4&orgForm=4&regCode=&page=0" aria-label="Первая"><span aria-hidden="true">&laquo;</span></a></li><li><a href="/lawyers?fullName=&registerNumber=&identityCard=&status=4&orgForm=4&regCode=&page=0" aria-label="Предыдущая"><span aria-hidden="true">&lsaquo;</span></a></li><li><a href="/lawyers?fullName=&registerNumber=&identityCard=&status=4&orgForm=4&regCode=&page=0">1</a></li><li class="active"><span>2<span class="sr-only">(current)</span></span></li><li class="disabled"><span><span aria-hidden="true">&rsaquo;</span></span></li><li class="disabled"><span><span aria-hidden="true">&raquo;</span></span></li></ul><div class="pager-summary">21-28 из 28</div>
             </div>
-        </span>
+
             <h4 class="search-res-h">Результаты поиска</h4>
             <table class="persons notaries">
                 <thead>
                 <tr>
-                    <th class="empty">&nbsp;</th>
-                    <th class="empty">&nbsp;</th>
-                    <th class="empty">&nbsp;</th>
-                    <th class="sortable"><a
-                            href="http://lawyers.minjust.ru/Lawyers?lawyername=&amp;regnumber=&amp;lawicard=&amp;lawstatus=4&amp;formation=4&amp;lawregion=&amp;max=20&amp;offset=20&amp;sort=registerNumber&amp;order=asc">Реестровый
-                        номер</a></th>
-
-                    <th class="sortable"><a
-                            href="http://lawyers.minjust.ru/Lawyers?lawyername=&amp;regnumber=&amp;lawicard=&amp;lawstatus=4&amp;formation=4&amp;lawregion=&amp;max=20&amp;offset=20&amp;sort=fio&amp;order=asc">ФИО
-                        адвоката</a></th>
-
-                    <th class="sortable"><a
-                            href="http://lawyers.minjust.ru/Lawyers?lawyername=&amp;regnumber=&amp;lawicard=&amp;lawstatus=4&amp;formation=4&amp;lawregion=&amp;max=20&amp;offset=20&amp;sort=reg_Caption&amp;order=asc">Субъект
-                        РФ</a></th>
-
-                    <th class="sortable"><a
-                            href="http://lawyers.minjust.ru/Lawyers?lawyername=&amp;regnumber=&amp;lawicard=&amp;lawstatus=4&amp;formation=4&amp;lawregion=&amp;max=20&amp;offset=20&amp;sort=identityCard&amp;order=asc">Номер
-                        удостоверения</a></th>
-
-                    <th class="sortable"><a
-                            href="http://lawyers.minjust.ru/Lawyers?lawyername=&amp;regnumber=&amp;lawicard=&amp;lawstatus=4&amp;formation=4&amp;lawregion=&amp;max=20&amp;offset=20&amp;sort=status&amp;order=asc">Текущий
-                        статус</a></th>
-
-                    <th class="empty">&nbsp;</th>
-                    <th class="empty">&nbsp;</th>
-
+                    <th><a href="/lawyers?fullName=&registerNumber=&identityCard=&status=4&orgForm=4&regCode=&sort=registerNumber,desc" class="null sorted-asc">Реестровый номер</a></th>
+                    <th><a href="/lawyers?fullName=&registerNumber=&identityCard=&status=4&orgForm=4&regCode=&sort=fio" class="null ">ФИО адвоката</a></th>
+                    <th><a href="/lawyers?fullName=&registerNumber=&identityCard=&status=4&orgForm=4&regCode=&sort=regCaption" class="null ">Субъект РФ</a></th>
+                    <th><a href="/lawyers?fullName=&registerNumber=&identityCard=&status=4&orgForm=4&regCode=&sort=identityCard" class="null ">Номер удостоверения</a></th>
+                    <th><a href="/lawyers?fullName=&registerNumber=&identityCard=&status=4&orgForm=4&regCode=&sort=status" class="null ">Текущий статус</a></th>
                 </tr>
                 </thead>
                 <tbody>
-
                 <tr class="even">
-
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-
                     <td>68/127</td>
-
-                    <td><a href="http://lawyers.minjust.ru/lawyers/show/1540453">Летуновский Дмитрий Вячеславович</a>
-                    </td>
-
+                    <td><a href="lawyers/show/1540453">Летуновский Дмитрий Вячеславович</a></td>
                     <td>Тамбовская область</td>
-
                     <td>126</td>
 
+
+
                     <td>Исключен</td>
 
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-
                 </tr>
-
                 <tr class="odd">
-
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-
                     <td>68/168</td>
-
-                    <td><a href="http://lawyers.minjust.ru/lawyers/show/1540494">Новикова Инга Александровна</a></td>
-
+                    <td><a href="lawyers/show/1540494">Новикова Инга Александровна</a></td>
                     <td>Тамбовская область</td>
-
                     <td>167</td>
 
+
+
                     <td>Исключен</td>
 
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-
                 </tr>
-
                 <tr class="even">
-
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-
                     <td>68/214</td>
-
-                    <td><a href="http://lawyers.minjust.ru/lawyers/show/1540540">Перегудова Олеся Николаевна</a></td>
-
+                    <td><a href="lawyers/show/1540540">Перегудова Олеся Николаевна</a></td>
                     <td>Тамбовская область</td>
-
                     <td>213</td>
 
+
+
                     <td>Исключен</td>
 
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-
                 </tr>
-
                 <tr class="odd">
-
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-
                     <td>68/241</td>
-
-                    <td><a href="http://lawyers.minjust.ru/lawyers/show/1540567">Степанов Валерий Иванович</a></td>
-
+                    <td><a href="lawyers/show/1540567">Степанов Валерий Иванович</a></td>
                     <td>Тамбовская область</td>
-
                     <td>240</td>
 
+
+
                     <td>Исключен</td>
 
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-
                 </tr>
-
                 <tr class="even">
-
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-
                     <td>68/7</td>
-
-                    <td><a href="http://lawyers.minjust.ru/lawyers/show/1540333">Анисимова Ирина Николаевна</a></td>
-
+                    <td><a href="lawyers/show/1540333">Анисимова Ирина Николаевна</a></td>
                     <td>Тамбовская область</td>
-
                     <td>7</td>
 
+
+
                     <td>Исключен</td>
 
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-
                 </tr>
-
                 <tr class="odd">
-
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-
                     <td>87/57</td>
-
-                    <td><a href="http://lawyers.minjust.ru/lawyers/show/1600219">Ребрик Вероника Владимировна</a></td>
-
+                    <td><a href="lawyers/show/1600219">Ребрик Вероника Владимировна</a></td>
                     <td>Чукотский автономный округ</td>
-
                     <td>19</td>
 
+
+
                     <td>Исключен</td>
 
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-
                 </tr>
-
                 <tr class="even">
-
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-
                     <td>87/72</td>
-
-                    <td><a href="http://lawyers.minjust.ru/lawyers/show/1639941">Курицына Яна Сергеевна</a></td>
-
+                    <td><a href="lawyers/show/1639941">Курицына Яна Сергеевна</a></td>
                     <td>Чукотский автономный округ</td>
-
                     <td></td>
+
+
 
                     <td>Исключен</td>
 
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-
                 </tr>
-
                 <tr class="odd">
-
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-
                     <td>87/9</td>
-
-                    <td><a href="http://lawyers.minjust.ru/lawyers/show/1600171">Швыдков Сергей Дмитриевич</a></td>
-
+                    <td><a href="lawyers/show/1600171">Швыдков Сергей Дмитриевич</a></td>
                     <td>Чукотский автономный округ</td>
-
                     <td></td>
+
+
 
                     <td>Исключен</td>
 
-                    <td class="empty">&nbsp;</td>
-                    <td class="empty">&nbsp;</td>
-
                 </tr>
-
                 </tbody>
 
             </table>
 
-            <div class="pagination">
-                <a class="prevLink"
-                   href="http://lawyers.minjust.ru/Lawyers?lawyername=&amp;regnumber=&amp;lawicard=&amp;lawstatus=4&amp;formation=4&amp;lawregion=&amp;max=20&amp;offset=0">&lt;</a><a
-                    class="step"
-                    href="http://lawyers.minjust.ru/Lawyers?lawyername=&amp;regnumber=&amp;lawicard=&amp;lawstatus=4&amp;formation=4&amp;lawregion=&amp;max=20&amp;offset=0">1</a><span
-                    class="currentStep">2</span>
-                <label for="name" style="float: right">Всего: 28</label>
+            <div>
+                <ul class="pagination"><li><a href="/lawyers?fullName=&registerNumber=&identityCard=&status=4&orgForm=4&regCode=&page=0" aria-label="Первая"><span aria-hidden="true">&laquo;</span></a></li><li><a href="/lawyers?fullName=&registerNumber=&identityCard=&status=4&orgForm=4&regCode=&page=0" aria-label="Предыдущая"><span aria-hidden="true">&lsaquo;</span></a></li><li><a href="/lawyers?fullName=&registerNumber=&identityCard=&status=4&orgForm=4&regCode=&page=0">1</a></li><li class="active"><span>2<span class="sr-only">(current)</span></span></li><li class="disabled"><span><span aria-hidden="true">&rsaquo;</span></span></li><li class="disabled"><span><span aria-hidden="true">&raquo;</span></span></li></ul><div style="float: right;" class="pager-summary">21-28 из 28</div>
             </div>
 
-            <br>
+            <br/>
             <div style="margin-right:10px; float:right;">
-                <a class="button-find btn" href="http://lawyers.minjust.ru/">
+                <a class="button-find btn" href="/">
                     <span>Назад</span>
                 </a>
             </div>
 
         </div>
     </div>
-
 </div><!-- #wrapper -->
 
-<div id="footer">
+<div  id="footer">
     <div class="copy fl">
-        © 2013 Российская Федерация <br>Все права защищены<a href="http://lawyers.minjust.ru/about">О портале</a>
+        © 2013 Российская Федерация <br/>Все права защищены<a href="/about">О портале</a>
     </div>
     <div class="half fl">
-        <a href="http://lawyers.minjust.ru/Lawyers">Адвокаты Российской Федерации</a>
-        <a href="http://lawyers.minjust.ru/RequestTerms">Порядок подачи жалобы на действия адвоката</a>
-        <a href="http://lawyers.minjust.ru/glossary">Глоссарий</a>
-        <a href="http://lawyers.minjust.ru/ExcludeCertificates">Аннулированные удостоверения</a>
-        <a href="http://lawyers.minjust.ru/acts">Нормативные правовые акты</a>
-        <a href="http://lawyers.minjust.ru/StatementOfForeignLawyer">Выписка из реестра адвокатов иностранных
-            государств</a>
+        <a href="/Lawyers">Адвокаты Российской Федерации</a>
+        <a href="/RequestTerms">Порядок подачи жалобы на действия адвоката</a>
+        <a href="/glossary">Глоссарий</a>
+        <a href="/ExcludeCertificates">Аннулированные удостоверения</a>
+        <a href="/acts">Нормативные правовые акты</a>
+        <a href="/StatementOfForeignLawyer">Выписка из реестра адвокатов иностранных государств</a>
     </div>
     <div class="half fl">
 
-        <a href="http://lawyers.minjust.ru/ModificationStatement">Заявление о внесении изменений</a>
-        <a href="http://lawyers.minjust.ru/CertificateIssueApp">Заявление о выдаче удостоверения</a>
-        <a href="http://lawyers.minjust.ru/ForeignLawyers">Адвокаты иностранных государств</a>
-        <a href="http://lawyers.minjust.ru/RegForeign">Регистрация в реестре адвокатов иностранных государств</a>
-        <a href="http://lawyers.minjust.ru/RevokedCertificates">Аннулированные свидетельства</a>
-        <a href="http://lawyers.minjust.ru/NpaForeign">Нормативные правовые акты</a>
+        <a href="/ModificationStatement">Заявление о внесении изменений</a>
+        <a href="/CertificateIssueApp">Заявление о выдаче удостоверения</a>
+        <a href="/ForeignLawyers">Адвокаты иностранных государств</a>
+        <a href="/RegForeign">Регистрация в реестре адвокатов иностранных государств</a>
+        <a href="/RevokedCertificates">Аннулированные свидетельства</a>
+        <a href="/NpaForeign">Нормативные правовые акты</a>
     </div>
     <div class="cb"></div>
 </div><!-- #footer -->
-
 
 </body>
 </html>
