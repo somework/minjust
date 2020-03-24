@@ -74,7 +74,8 @@ class ClientTest extends TestCase
         ];
         yield 'Михайлов' => [
             'formData' => [
-                FindRequest::FULL_NAME => 'михайлов олег николаевич',
+                FindRequest::FULL_NAME           => 'михайлов олег николаевич',
+                FindRequest::TERRITORIAL_SUBJECT => '77',
             ],
             'search'   => '77/2340',
         ];

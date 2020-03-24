@@ -35,7 +35,7 @@ class FindRequest
     /**
      * @var string
      */
-    public const TERRITORIAL_SUBJECT = 'regCode';
+    public const TERRITORIAL_SUBJECT = 'countryCode';
 
     /**
      * @var string
