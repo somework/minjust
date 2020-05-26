@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SomeWork\Minjust\Parser;
 
+use Exception;
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\Dom\Collection;
 use PHPHtmlParser\Dom\HtmlNode;
@@ -12,8 +13,10 @@ use PHPHtmlParser\Exceptions\NotLoadedException;
 use SomeWork\Minjust\Entity\DetailLawyer;
 use SomeWork\Minjust\Entity\LawFormation;
 use SomeWork\Minjust\Entity\Lawyer;
+use SomeWork\Minjust\Entity\Location;
 use SomeWork\Minjust\Exception\BlockNotFoundException;
 use SomeWork\Minjust\Exception\RuntimeException;
+use SomeWork\Minjust\FindRequest;
 use SomeWork\Minjust\FindResponse;
 
 /**
@@ -50,6 +53,11 @@ class DomParser implements ParserInterface
      * @var string
      */
     protected const LAWYER_DETAIL_NAME_FIELD = 'label';
+
+    /**
+     * @var string
+     */
+    protected const LOCATIONS_BLOCK_SELECTOR = 'select#' . FindRequest::TERRITORIAL_SUBJECT . ' > option';
 
     public function list(string $body): FindResponse
     {
@@ -135,7 +143,7 @@ class DomParser implements ParserInterface
 
             try {
                 $pagination = $dom->find(static::PAGINATION_BLOCK_SELECTOR, 0);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 throw new RuntimeException($exception->getMessage(), $exception->getCode(), $exception);
             }
 
@@ -148,7 +156,7 @@ class DomParser implements ParserInterface
     }
 
     /**
-     * @param \PHPHtmlParser\Dom $dom
+     * @param Dom $dom
      *
      * @return Lawyer[]
      * @throws ChildNotFoundException
@@ -161,18 +169,32 @@ class DomParser implements ParserInterface
          * @var Dom\HtmlNode[]|Collection $nodes
          */
         $nodes = $dom->find(static::LAWYERS_LIST_BLOCK_SELECTOR);
+        $locations = $this->getLocations($dom);
+
         foreach ($nodes as $node) {
             /**
              * @var Dom\HtmlNode[]|Collection $tds
              */
             $tds = $node->find('td');
+
+            $registerNumber = trim($tds[0]->text());
+            $certificateNumber = trim($tds[3]->text());
+            $fullName = trim($tds[1]->text(true));
+            $url = trim($tds[1]->firstChild()->getAttribute('href'));
+            $status = trim($tds[4]->text());
+            $location = $this->getLocationByRegisterNumber($registerNumber, $locations);
+
+            if (null === $location) {
+                continue;
+            }
+
             $data[] = (new Lawyer())
-                ->setRegisterNumber($tds[0]->text())
-                ->setFullName($tds[1]->text(true))
-                ->setUrl($tds[1]->firstChild()->getAttribute('href'))
-                ->setTerritorialSubject($tds[2]->text())
-                ->setCertificateNumber($tds[3]->text())
-                ->setStatus($tds[4]->text());
+                ->setRegisterNumber($registerNumber)
+                ->setCertificateNumber($certificateNumber)
+                ->setFullName($fullName)
+                ->setUrl($url)
+                ->setLocation($location)
+                ->setStatus($status);
         }
 
         return $data;
@@ -208,5 +230,55 @@ class DomParser implements ParserInterface
         }
 
         return $lawyer;
+    }
+
+    /**
+     * @param string     $registerNumber
+     * @param Location[] $locations
+     *
+     * @return Location|null
+     * @return Location|null
+     */
+    protected function getLocationByRegisterNumber(string $registerNumber, array $locations): ?Location
+    {
+        [$locationId,] = explode('/', $registerNumber);
+
+        foreach ($locations as $location) {
+            if ($location->getId() === $locationId) {
+                return $location;
+            }
+        }
+
+        return null;
+    }
+
+    protected function getLocations(Dom $dom)
+    {
+        /**
+         * @var Dom\HtmlNode[] $nodes
+         */
+        $nodes = $dom->find(static::LOCATIONS_BLOCK_SELECTOR)->toArray();
+
+        $nodes = array_filter(
+            $nodes,
+            static function (HtmlNode $htmlNode) {
+                return $htmlNode->getAttribute('value');
+            }
+        );
+
+        return array_map(
+            static function (HtmlNode $htmlNode) {
+                $id = trim($htmlNode->getAttribute('value'));
+
+                $name = $htmlNode->text();
+                $name = str_replace('[' . $id . ']', '', $name);
+                $name = trim($name);
+
+                return (new Location())
+                    ->setId($id)
+                    ->setName($name);
+            },
+            $nodes
+        );
     }
 }

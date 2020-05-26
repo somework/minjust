@@ -10,9 +10,10 @@ use ReflectionObject;
 use SomeWork\Minjust\Entity\DetailLawyer;
 use SomeWork\Minjust\Entity\LawFormation;
 use SomeWork\Minjust\Entity\Lawyer;
+use SomeWork\Minjust\Entity\Location;
 
 /**
- * @coversDefaultClass \SomeWork\Minjust\Entity\DetailLawyer
+ * @coversDefaultClass DetailLawyer
  * @covers \SomeWork\Minjust\Entity\DetailLawyer
  */
 class DetailLawyerTest extends TestCase
@@ -38,9 +39,9 @@ class DetailLawyerTest extends TestCase
     /**
      * @depends testEmpty
      *
-     * @param \SomeWork\Minjust\Entity\DetailLawyer $lawyer
+     * @param DetailLawyer $lawyer
      *
-     * @return \SomeWork\Minjust\Entity\DetailLawyer
+     * @return DetailLawyer
      */
     public function testSet(DetailLawyer $lawyer): DetailLawyer
     {
@@ -59,7 +60,7 @@ class DetailLawyerTest extends TestCase
     /**
      * @depends testSet
      *
-     * @param \SomeWork\Minjust\Entity\DetailLawyer $lawyer
+     * @param DetailLawyer $lawyer
      */
     public function testGet(DetailLawyer $lawyer): void
     {
@@ -71,13 +72,17 @@ class DetailLawyerTest extends TestCase
 
     public function testLoadFromLawyer(): void
     {
+        $location = (new Location())
+            ->setId('01')
+            ->setName('testLocation');
+
         $lawyer = (new Lawyer())
             ->setUrl('testUrl')
             ->setFullName('testFullName')
             ->setStatus('testStatus')
             ->setRegisterNumber('testRegisterNumber')
             ->setCertificateNumber('testCertificateNumber')
-            ->setTerritorialSubject('testTerritorialSubject');
+            ->setLocation($location);
 
         $detailLawyer = (new DetailLawyer())->loadFromLawyer($lawyer);
 
@@ -86,7 +91,7 @@ class DetailLawyerTest extends TestCase
         $this->assertEquals($lawyer->getStatus(), $detailLawyer->getStatus());
         $this->assertEquals($lawyer->getRegisterNumber(), $detailLawyer->getRegisterNumber());
         $this->assertEquals($lawyer->getCertificateNumber(), $detailLawyer->getCertificateNumber());
-        $this->assertEquals($lawyer->getTerritorialSubject(), $detailLawyer->getTerritorialSubject());
+        $this->assertEquals($lawyer->getLocation(), $detailLawyer->getLocation());
     }
 
     /**
@@ -94,13 +99,17 @@ class DetailLawyerTest extends TestCase
      */
     public function testConstruct(): void
     {
+        $location = (new Location())
+            ->setId('01')
+            ->setName('test Location');
+
         $lawyer = (new Lawyer())
             ->setUrl('testUrl')
             ->setFullName('testFullName')
             ->setStatus('testStatus')
             ->setRegisterNumber('testRegisterNumber')
             ->setCertificateNumber('testCertificateNumber')
-            ->setTerritorialSubject('testTerritorialSubject');
+            ->setLocation($location);
 
         $detailLawyer = $this->createPartialMock(DetailLawyer::class, ['loadFromLawyer']);
 

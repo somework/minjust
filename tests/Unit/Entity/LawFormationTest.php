@@ -10,7 +10,7 @@ use SomeWork\Minjust\Entity\LawFormation;
 
 /**
  * @covers \SomeWork\Minjust\Entity\LawFormation
- * @coversDefaultClass \SomeWork\Minjust\Entity\LawFormation
+ * @coversDefaultClass LawFormation
  */
 class LawFormationTest extends TestCase
 {
@@ -40,9 +40,9 @@ class LawFormationTest extends TestCase
     /**
      * @depends testEmpty
      *
-     * @param \SomeWork\Minjust\Entity\LawFormation $lawFormation
+     * @param LawFormation $lawFormation
      *
-     * @return \SomeWork\Minjust\Entity\LawFormation
+     * @return LawFormation
      */
     public function testSet(LawFormation $lawFormation): LawFormation
     {
@@ -65,7 +65,7 @@ class LawFormationTest extends TestCase
     /**
      * @depends testSet
      *
-     * @param \SomeWork\Minjust\Entity\LawFormation $lawFormation
+     * @param LawFormation $lawFormation
      */
     public function testGet(LawFormation $lawFormation): void
     {

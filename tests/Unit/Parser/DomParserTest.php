@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SomeWork\Minjust\Tests\Unit\Parser;
 
+use Generator;
 use Iterator;
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\Exceptions\ChildNotFoundException;
@@ -13,6 +14,7 @@ use PHPHtmlParser\Exceptions\StrictException;
 use ReflectionClass;
 use ReflectionException;
 use SomeWork\Minjust\Entity\Lawyer;
+use SomeWork\Minjust\Entity\Location;
 use SomeWork\Minjust\Parser\DomParser;
 use SomeWork\Minjust\Parser\ParserInterface;
 
@@ -62,7 +64,7 @@ class DomParserTest extends AbstractParserTest
      * @return mixed Method return.
      * @throws ReflectionException
      */
-    public function invokeMethod(&$object, $methodName, array $parameters = [])
+    public function invokeMethod($object, $methodName, array $parameters = [])
     {
         $reflection = new ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
@@ -115,6 +117,9 @@ class DomParserTest extends AbstractParserTest
         $parser = $this->getParser();
 
         $dom = (new Dom())->load($resource);
+        /**
+         * @var Lawyer[] $lawyers
+         */
         $lawyers = $this->invokeMethod($parser, 'getListLawyers', [$dom]);
         $this->assertIsArray($lawyers);
         $this->assertCount($count, $lawyers);
@@ -134,12 +139,59 @@ class DomParserTest extends AbstractParserTest
             $this->assertIsString($lawyer->getStatus());
             $this->assertGreaterThan(0, strlen($lawyer->getStatus()));
 
-            $this->assertIsString($lawyer->getTerritorialSubject());
-            $this->assertGreaterThan(0, strlen($lawyer->getTerritorialSubject()));
+            $this->assertGreaterThan(0, strlen($lawyer->getLocation()->getId()));
+            $this->assertGreaterThan(0, strlen($lawyer->getLocation()->getName()));
 
             $this->assertIsString($lawyer->getUrl());
             $this->assertGreaterThan(0, strlen($lawyer->getUrl()));
         }
+    }
+
+    /**
+     * @dataProvider getLocationsProvider
+     *
+     * @param string $resource
+     *
+     * @throws ChildNotFoundException
+     * @throws CircularException
+     * @throws CurlException
+     * @throws ReflectionException
+     * @throws StrictException
+     */
+    public function testGetLocations(string $resource): void
+    {
+        $parser = $this->getParser();
+
+        $dom = (new Dom())->load($resource);
+
+        /**
+         * @var Location[] $locations
+         */
+        $locations = $this->invokeMethod($parser, 'getLocations', [$dom]);
+
+        $this->assertIsArray($locations);
+
+        foreach ($locations as $location) {
+            $this->assertInstanceOf(Location::class, $location);
+
+            $this->assertIsString($location->getId());
+            $this->assertGreaterThan(0, strlen($location->getId()));
+
+            $this->assertIsString($location->getName());
+            $this->assertGreaterThan(0, strlen($location->getName()));
+            $this->assertStringNotContainsString($location->getId(), $location->getName());
+        }
+    }
+
+    public function getLocationsProvider(): ?Generator
+    {
+        yield 'one-page' => [
+            'resource' => dirname(__DIR__, 2) . '/data/one-page.html',
+        ];
+        yield 'web' => [
+            'resource' => 'http://lawyers.minjust.ru/Lawyers',
+            'page'     => 1,
+        ];
     }
 
     public function getPageProvider(): Iterator

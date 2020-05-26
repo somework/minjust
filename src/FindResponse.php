@@ -119,7 +119,7 @@ class FindResponse
     }
 
     /**
-     * @param \SomeWork\Minjust\Entity\Lawyer $lawyer
+     * @param Lawyer $lawyer
      *
      * @return FindResponse
      */

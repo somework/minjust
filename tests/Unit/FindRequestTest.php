@@ -10,7 +10,7 @@ use SomeWork\Minjust\FindRequest;
 
 /**
  * @covers \SomeWork\Minjust\FindRequest
- * @coversDefaultClass \SomeWork\Minjust\FindRequest
+ * @coversDefaultClass FindRequest
  */
 class FindRequestTest extends TestCase
 {
@@ -46,9 +46,9 @@ class FindRequestTest extends TestCase
     /**
      * @depends testEmpty
      *
-     * @param \SomeWork\Minjust\FindRequest $request
+     * @param FindRequest $request
      *
-     * @return \SomeWork\Minjust\FindRequest
+     * @return FindRequest
      */
     public function testSet(FindRequest $request): FindRequest
     {
@@ -77,9 +77,9 @@ class FindRequestTest extends TestCase
     /**
      * @depends testSet
      *
-     * @param \SomeWork\Minjust\FindRequest $request
+     * @param FindRequest $request
      *
-     * @return \SomeWork\Minjust\FindRequest
+     * @return FindRequest
      */
     public function testGet(FindRequest $request): FindRequest
     {
@@ -114,7 +114,7 @@ class FindRequestTest extends TestCase
      * @depends testSet
      * @covers ::getFormData
      *
-     * @param \SomeWork\Minjust\FindRequest $findRequest
+     * @param FindRequest $findRequest
      */
     public function testGetFormData(FindRequest $findRequest): void
     {

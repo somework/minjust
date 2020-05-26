@@ -2,6 +2,8 @@
 
 namespace SomeWork\Minjust\Exception;
 
-interface MinjustException extends \Throwable
+use Throwable;
+
+interface MinjustException extends Throwable
 {
 }

@@ -32,7 +32,7 @@ class DetailLawyer extends Lawyer
             ->setRegisterNumber($lawyer->getRegisterNumber())
             ->setFullName($lawyer->getFullName())
             ->setUrl($lawyer->getUrl())
-            ->setTerritorialSubject($lawyer->getTerritorialSubject())
+            ->setLocation($lawyer->getLocation())
             ->setCertificateNumber($lawyer->getCertificateNumber())
             ->setStatus($lawyer->getStatus());
     }

@@ -156,7 +156,7 @@ class ClientTest extends TestCase
      * @return mixed Method return.
      * @throws ReflectionException
      */
-    public function invokeMethod(&$object, $methodName, array $parameters = [])
+    public function invokeMethod($object, $methodName, array $parameters = [])
     {
         $reflection = new ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
@@ -166,7 +166,7 @@ class ClientTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testWrongStatusCodeException(): void
     {
@@ -188,7 +188,6 @@ class ClientTest extends TestCase
         $this->expectException(WrongStatusCodeException::class);
 
         $client = new Client($httpClient, $requestFactory);
-        /* @noinspection PhpUnhandledExceptionInspection */
         $this->invokeMethod($client, 'handleRequest', [$request]);
     }
 }

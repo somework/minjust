@@ -16,11 +16,11 @@ use SomeWork\Minjust\Client;
 use SomeWork\Minjust\Entity\DetailLawyer;
 use SomeWork\Minjust\Entity\LawFormation;
 use SomeWork\Minjust\Entity\Lawyer;
+use SomeWork\Minjust\Entity\Location;
 use SomeWork\Minjust\FindRequest;
 use SomeWork\Minjust\FindResponse;
 use SomeWork\Minjust\Parser\ParserInterface;
 use SomeWork\Minjust\Service;
-
 
 /**
  * @coversDefaultClass \SomeWork\Minjust\Service
@@ -127,8 +127,12 @@ class ServiceTest extends TestCase
             $id = md5(microtime(true));
         }
 
+        $location = (new Location())
+            ->setId('01')
+            ->setName('Тестовая территория');
+
         return (new Lawyer())
-            ->setTerritorialSubject('Тестовая территория')
+            ->setLocation($location)
             ->setCertificateNumber('test/' . $id)
             ->setRegisterNumber('test/' . $id)
             ->setStatus('Тестовый статус')
@@ -137,7 +141,7 @@ class ServiceTest extends TestCase
     }
 
     /**
-     * @param \SomeWork\Minjust\Entity\Lawyer $lawyer
+     * @param Lawyer $lawyer
      *
      * @return Generator
      */
@@ -296,7 +300,7 @@ class ServiceTest extends TestCase
         $lawyer = $generator->current();
         $this->assertInstanceOf(DetailLawyer::class, $lawyer);
         $this->assertEquals($lawyerFirst->getUrl(), $lawyer->getUrl());
-        $this->assertEquals($lawyerFirst->getTerritorialSubject(), $lawyer->getTerritorialSubject());
+        $this->assertEquals($lawyerFirst->getLocation(), $lawyer->getLocation());
         $this->assertEquals($lawyerFirst->getStatus(), $lawyer->getStatus());
         $this->assertEquals($lawyerFirst->getCertificateNumber(), $lawyer->getCertificateNumber());
         $this->assertEquals($lawyerFirst->getRegisterNumber(), $lawyer->getRegisterNumber());
@@ -307,7 +311,7 @@ class ServiceTest extends TestCase
         $lawyer = $generator->current();
         $this->assertInstanceOf(DetailLawyer::class, $lawyer);
         $this->assertEquals($lawyerSecond->getUrl(), $lawyer->getUrl());
-        $this->assertEquals($lawyerSecond->getTerritorialSubject(), $lawyer->getTerritorialSubject());
+        $this->assertEquals($lawyerSecond->getLocation(), $lawyer->getLocation());
         $this->assertEquals($lawyerSecond->getStatus(), $lawyer->getStatus());
         $this->assertEquals($lawyerSecond->getCertificateNumber(), $lawyer->getCertificateNumber());
         $this->assertEquals($lawyerSecond->getRegisterNumber(), $lawyer->getRegisterNumber());
@@ -344,7 +348,7 @@ class ServiceTest extends TestCase
      * @return mixed Method return.
      * @throws ReflectionException
      */
-    public function invokeMethod(&$object, $methodName, array $parameters = [])
+    public function invokeMethod($object, $methodName, array $parameters = [])
     {
         $reflection = new ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);

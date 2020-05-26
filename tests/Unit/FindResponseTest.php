@@ -12,7 +12,7 @@ use SomeWork\Minjust\FindResponse;
 
 /**
  * @covers \SomeWork\Minjust\FindResponse
- * @coversDefaultClass \SomeWork\Minjust\FindResponse
+ * @coversDefaultClass FindResponse
  */
 class FindResponseTest extends TestCase
 {
@@ -42,9 +42,9 @@ class FindResponseTest extends TestCase
     /**
      * @depends testEmpty
      *
-     * @param \SomeWork\Minjust\FindResponse $response
+     * @param FindResponse $response
      *
-     * @return \SomeWork\Minjust\FindResponse
+     * @return FindResponse
      */
     public function testSet(FindResponse $response): FindResponse
     {
@@ -80,7 +80,7 @@ class FindResponseTest extends TestCase
     /**
      * @depends testSet
      *
-     * @param \SomeWork\Minjust\FindResponse $response
+     * @param FindResponse $response
      */
     public function testGet(FindResponse $response): void
     {

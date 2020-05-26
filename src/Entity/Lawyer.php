@@ -30,9 +30,9 @@ class Lawyer
     protected $status = '';
 
     /**
-     * @var string
+     * @var Location
      */
-    protected $territorialSubject = '';
+    protected $location;
 
     /**
      * @var string
@@ -140,21 +140,21 @@ class Lawyer
     }
 
     /**
-     * @return string
+     * @return Location
      */
-    public function getTerritorialSubject(): string
+    public function getLocation(): Location
     {
-        return $this->territorialSubject;
+        return $this->location;
     }
 
     /**
-     * @param string $territorialSubject
+     * @param Location $location
      *
-     * @return static
+     * @return Lawyer
      */
-    public function setTerritorialSubject(string $territorialSubject): self
+    public function setLocation(Location $location): Lawyer
     {
-        $this->territorialSubject = $territorialSubject;
+        $this->location = $location;
 
         return $this;
     }
